@@ -27,8 +27,41 @@ function quoma_create_miei_preventivi() {
 	}
 }
 
-// Controllo accesso "miei-preventivi" solo per utenti "subscriber" loggati
-// code here
+// Creazione della pagina "accesso-negato"
+add_action('init', 'quoma_create_accesso_negato');
+// Se la pagina "accesso-negato" non esiste, creala
+function quoma_create_accesso_negato() {
+	if (get_page_by_path('accesso-negato') === null) {
+		$miei_preventivi = array(
+			'post_title'    => 'Accesso negato',
+			'post_name'     => 'accesso-negato',
+			'post_content'  => 'Accesso negato, effettuare il login per visuallizare la pagina personale.',
+			'post_status'   => 'publish',
+			'post_author'   => 1,
+			'post_type'     => 'page'
+		);
+		wp_insert_post($miei_preventivi);
+	}
+}
+
+// Controllo accesso "miei-preventivi", accessibile solo per utenti "subscriber" loggati
+add_action( 'template_redirect', 'quoma_custom_redirects' );
+function quoma_custom_redirects() {
+	if ( is_page('miei-preventivi') ) {
+		if (is_user_logged_in()) {
+			$user = wp_get_current_user();
+			if ($user->has_cap('subscriber')) {
+				// Visualizza la pagina "miei-preventivi"
+			} else {
+				wp_redirect( get_permalink( get_page_by_path( 'accesso-negato' ) ) );
+				die;
+			}
+		} else {
+			wp_redirect( get_permalink( get_page_by_path( 'accesso-negato' ) ) );
+			die;
+		}
+	}
+}
 
 // Gestione del redirect quando si esegue il login
 add_filter('login_redirect', 'quoma_login_redirect', 10, 3 );
