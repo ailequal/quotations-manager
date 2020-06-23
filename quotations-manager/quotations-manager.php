@@ -16,14 +16,37 @@ Author URI: https://github.com/ailequal
 
 
 /*
+ * register_activation_hook()
+ */
+
+register_activation_hook( __FILE__, 'quoma_install' );
+function quoma_install() {
+	global $wp_version;
+	if ( version_compare( $wp_version, '5.4.2', '<' ) ) {
+		wp_die( 'This plugin requires WordPress version 5.4.2 or higher.' );
+	}
+}
+
+
+/*
  * require_once
  */
 
 // Creazione delle pagine
-require_once( __DIR__ . '/quoma-pages.php' );
+require_once( __DIR__ . '/includes/quoma-pages.php' );
 
 // Gestione redirect
-require_once( __DIR__ . '/quoma-redirects.php' );
+require_once( __DIR__ . '/includes/quoma-redirects.php' );
 
 // Creazione CPT
-require_once( __DIR__ . '/quoma-cpt.php' );
+require_once( __DIR__ . '/includes/quoma-cpt.php' );
+
+
+/*
+ * register_deactivation_hook()
+ */
+
+register_deactivation_hook( __FILE__, 'prowp_deactivate()' );
+function prowp_deactivate() {
+	// azioni da definire
+}
