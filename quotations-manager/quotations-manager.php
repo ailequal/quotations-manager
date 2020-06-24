@@ -29,17 +29,20 @@ function quoma_install() {
 
 
 /*
- * require_once
+ * include
  */
 
 // Creazione delle pagine
-require_once( __DIR__ . '/includes/quoma-pages.php' );
+include( plugin_dir_path( __FILE__ ) . 'includes/quoma-pages.php' );
 
 // Gestione redirect
-require_once( __DIR__ . '/includes/quoma-redirects.php' );
+include( plugin_dir_path( __FILE__ ) . 'includes/quoma-redirects.php' );
 
 // Creazione CPT
-require_once( __DIR__ . '/includes/quoma-cpt.php' );
+include( plugin_dir_path( __FILE__ ) . 'includes/quoma-cpt.php' );
+
+// Gestione menu
+include( plugin_dir_path( __FILE__ ) . 'includes/quoma-menu.php' );
 
 
 /*
