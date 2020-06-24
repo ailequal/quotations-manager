@@ -51,7 +51,7 @@ function quoma_create_post_type_services() {
 			'author',
 			'thumbnail',
 			'excerpt',
-//			'custom-fields',
+			'custom-fields',
 			'page-attributes',
 			'revisions'
 		),
@@ -66,21 +66,43 @@ function quoma_meta_box_service() {
 	add_meta_box( 'quoma-service', 'Dettagli servizio', 'quoma_meta_box_service_content', 'service', 'normal', 'default' );
 }
 
+// Funzione di callback per add_meta_box()
 function quoma_meta_box_service_content( $service ) {
-	?>
-	<div><h1>Testing</h1></div>
-	<?php
-//	var_dump( $service );
-	add_post_meta( $service->ID, 'name', '', true );
-	add_post_meta( $service->ID, 'description', '', true );
-//	$service_name = get_post_meta( $service->ID, '', false );
-//	var_dump( $service_name );
-	?>
-	<div><h1>Lista dei dettagli del servizio offerto</h1></div>
-	<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores consequuntur deserunt dolor, doloribus
-		et
-		harum, laborum laudantium pariatur, quas repellendus sint vero? Accusantium cupiditate dolores ea iste quasi
-		sequi vitae?
-	</div>
-	<?php
+	// Creazione dei post meta necessari
+	add_post_meta( $service->ID, '_name', '', true );
+	add_post_meta( $service->ID, '_description', '', true );
+	add_post_meta( $service->ID, '_days_for_delivery', '', true );
+	add_post_meta( $service->ID, '_price_list', '', true );
+	add_post_meta( $service->ID, '_extras_list', '', true );
+
+	// Salvataggio valore post meta nella rispettiva variabile
+	$quoma_service_name              = get_post_meta( $service->ID, '_name', true );
+	$quoma_service_description       = get_post_meta( $service->ID, '_description', true );
+	$quoma_service_days_for_delivery = get_post_meta( $service->ID, '_days_for_delivery', true );
+	$quoma_service_price_list        = get_post_meta( $service->ID, '_price_list', true );
+	$quoma_service_extras_list       = get_post_meta( $service->ID, '_extras_list', true );
+
+	// Inizio form
+	wp_nonce_field( plugin_basename( __FILE__ ), 'quoma_meta_box_service_nonce' );
+	echo '<p>Nome: <input type="text" name="_name" value="' . esc_attr( $quoma_service_name ) . '" /></p>';
+	echo '<p>Descrizione: <input type="text" name="_description" value="' . esc_attr( $quoma_service_description ) . '" /></p>';
+	echo '<p>Giorni per la consegna: <input type="text" name="_days_for_delivery" value="' . esc_attr( $quoma_service_days_for_delivery ) . '" /></p>';
+	echo '<p>Prezzo di partenza: <input type="text" name="_price_list" value="' . esc_attr( $quoma_service_price_list ) . '" /></p>';
+	echo '<p>Servizi extra: <input type="text" name="_extras_list" value="' . esc_attr( $quoma_service_extras_list ) . '" /></p>';
+}
+
+// Salvataggio dei post meta aggiornati
+add_action( 'save_post_service', 'quoma_meta_box_service_save' );
+function quoma_meta_box_service_save( $service_id ) {
+	if ( isset( $_POST['_name'] ) ) {
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+		wp_verify_nonce( plugin_basename( __FILE__ ), 'quoma_meta_box_service_nonce' );
+		update_post_meta( $service_id, '_name', sanitize_text_field( $_POST['_name'] ) );
+		update_post_meta( $service_id, '_description', sanitize_text_field( $_POST['_description'] ) );
+		update_post_meta( $service_id, '_days_for_delivery', sanitize_text_field( $_POST['_days_for_delivery'] ) );
+		update_post_meta( $service_id, '_price_list', sanitize_text_field( $_POST['_price_list'] ) );
+		update_post_meta( $service_id, '_extras_list', sanitize_text_field( $_POST['_extras_list'] ) );
+	}
 }
