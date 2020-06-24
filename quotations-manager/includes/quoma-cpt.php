@@ -63,11 +63,24 @@ function quoma_create_post_type_services() {
 
 // Creazione della meta box per "service"
 function quoma_meta_box_service() {
-	add_meta_box( 'quoma-service', 'Servizi Extra', 'quoma_meta_box_service_content', 'service', 'normal', 'default' );
+	add_meta_box( 'quoma-service', 'Dettagli servizio', 'quoma_meta_box_service_content', 'service', 'normal', 'default' );
 }
 
-function quoma_meta_box_service_content() {
+function quoma_meta_box_service_content( $service ) {
 	?>
-	<div><h2>Lista dei servizi extra applicabili</h2></div>
+	<div><h1>Testing</h1></div>
+	<?php
+//	var_dump( $service );
+	add_post_meta( $service->ID, 'name', '', true );
+	add_post_meta( $service->ID, 'description', '', true );
+//	$service_name = get_post_meta( $service->ID, '', false );
+//	var_dump( $service_name );
+	?>
+	<div><h1>Lista dei dettagli del servizio offerto</h1></div>
+	<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores consequuntur deserunt dolor, doloribus
+		et
+		harum, laborum laudantium pariatur, quas repellendus sint vero? Accusantium cupiditate dolores ea iste quasi
+		sequi vitae?
+	</div>
 	<?php
 }
