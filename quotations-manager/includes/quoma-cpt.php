@@ -3,7 +3,7 @@
  * Creazione CPT
 */
 
-// Creazione del custom post type "service"
+// Creazione del CPT "service"
 add_action( 'init', 'quoma_create_post_type_services' );
 function quoma_create_post_type_services() {
 	$labels = array(
@@ -33,30 +33,41 @@ function quoma_create_post_type_services() {
 		'items_list'            => _x( 'Lista dei servizi', 'Screen reader text for the items list heading on the post type listing screen. Default “Posts list”/”Pages list”. Added in 4.4', 'quotations-manager' ),
 	);
 	$args   = array(
-		'labels'             => $labels,
-		'public'             => true,
-		'publicly_queryable' => true,
-		'show_ui'            => true,
-		'show_in_menu'       => true,
-		'show_in_rest'       => true,
-		'query_var'          => true,
-		'rewrite'            => array( 'slug' => 'servizio' ),
-		'capability_type'    => 'page',
-		'has_archive'        => true,
-		'hierarchical'       => true,
-		'menu_position'      => null,
-		'supports'           => array(
+		'labels'               => $labels,
+		'public'               => true,
+		'publicly_queryable'   => true,
+		'show_ui'              => true,
+		'show_in_menu'         => true,
+		'show_in_rest'         => true,
+		'query_var'            => true,
+		'rewrite'              => array( 'slug' => 'servizio' ),
+		'capability_type'      => 'page',
+		'has_archive'          => true,
+		'hierarchical'         => true,
+		'menu_position'        => null,
+		'supports'             => array(
 			'title',
 			'editor',
 			'author',
 			'thumbnail',
 			'excerpt',
-			'custom-fields',
+//			'custom-fields',
 			'page-attributes',
 			'revisions'
 		),
-		'taxonomies'         => array( 'category', 'post_tag' ),
-//		'register_meta_box_cb' =>
+		'taxonomies'           => array( 'category', 'post_tag' ),
+		'register_meta_box_cb' => 'quoma_meta_box_service',
 	);
 	register_post_type( 'service', $args );
+}
+
+// Creazione della meta box per "service"
+function quoma_meta_box_service() {
+	add_meta_box( 'quoma-service', 'Servizi Extra', 'quoma_meta_box_service_content', 'service', 'normal', 'default' );
+}
+
+function quoma_meta_box_service_content() {
+	?>
+	<div><h2>Lista dei servizi extra applicabili</h2></div>
+	<?php
 }

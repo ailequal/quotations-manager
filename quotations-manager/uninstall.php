@@ -4,7 +4,7 @@
  */
 
 // Avvia la disinstallazione solo se l'azione e' chiamata da WordPress
-if (!defined('WP_UNINSTALL_PLUGIN')) {
+if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	die;
 }
 
