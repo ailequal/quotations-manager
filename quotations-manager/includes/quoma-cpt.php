@@ -91,24 +91,15 @@ function quoma_meta_box_service_content( $service ) {
 event.keyCode === 46 ? true : !isNaN(Number(event.key))" name="_days_for_delivery" value="' . esc_attr( $quoma_service_days_for_delivery ) . '" /></p>';
 	echo '<p>Prezzo di partenza: <input type="number" onkeydown="javascript: return event.keyCode === 8 ||
 event.keyCode === 46 ? true : !isNaN(Number(event.key))" name="_price_list" value="' . esc_attr( $quoma_service_price_list ) . '" /></p>';
-//	echo '<p style="display: none;">Servizi extra: <input type="text" name="_extras_list" value="' . esc_attr( $quoma_service_extras_list ) . '" /></p>';
-	$unser = unserialize( $quoma_service_extras_list );
-	var_dump( $unser );
-//	echo '<p>Servizi extra: <input type="text" name="_extras_list" value="' . esc_attr( $unser ) . '" /></p>';
-
 
 	// Form per i servizi extra
-	echo '<h2 style="font-weight: bold;">Servizio extra 01</h2>';
-	echo '<p>Nome: <input type="text" name="_extra_01_name" value="' . '" /></p>';
-	echo '<p>Descrizione: <input type="text" name="_extra_01_description" value="' . '" /></p>';
-	echo '<p>Prezzo: <input type="number" onkeydown="javascript: return event.keyCode === 8 ||
-event.keyCode === 46 ? true : !isNaN(Number(event.key))" name="_extra_01_price" value="' . '" /></p>';
-
-	echo '<h2 style="font-weight: bold;">Servizio extra 02</h2>';
-	echo '<p>Nome: <input type="text" name="_extra_02_name" value="' . '" /></p>';
-	echo '<p>Descrizione: <input type="text" name="_extra_02_description" value="' . '" /></p>';
-	echo '<p>Prezzo: <input type="number" onkeydown="javascript: return event.keyCode === 8 ||
-event.keyCode === 46 ? true : !isNaN(Number(event.key))" name="_extra_02_price" value="' . '" /></p>';
+	for ( $i = 1; $i <= 5; $i ++ ) {
+		echo '<h2 style="font-weight: bold;">Servizio extra ' . $i . '</h2>';
+		echo '<p>Nome: <input type="text" name="_extra_' . $i . '_name" value="' . '" /></p>';
+		echo '<p>Descrizione: <input type="text" name="_extra_' . $i . '_description" value="' . '" /></p>';
+		echo '<p>Prezzo: <input type="number" onkeydown="javascript: return event.keyCode === 8 ||
+event.keyCode === 46 ? true : !isNaN(Number(event.key))" name="_extra_' . $i . '_price" value="' . '" /></p>';
+	}
 }
 
 // Salvataggio dei post meta aggiornati
@@ -125,27 +116,29 @@ function quoma_meta_box_service_save( $service_id ) {
 		update_post_meta( $service_id, '_description', sanitize_text_field( $_POST['_description'] ) );
 		update_post_meta( $service_id, '_days_for_delivery', sanitize_text_field( $_POST['_days_for_delivery'] ) );
 		update_post_meta( $service_id, '_price_list', sanitize_text_field( $_POST['_price_list'] ) );
-//		update_post_meta( $service_id, '_extras_list', sanitize_text_field( $_POST['_extras_list'] ) );
 
-		// Salvataggio servizi extra
-		$extras_list = array(
-			strtolower( str_replace( ' ', '_', $_POST['_extra_01_name'] ) ) => array(
-				'name'        => $_POST['_extra_01_name'],
-				'description' => $_POST['_extra_01_description'],
-				'price'       => $_POST['_extra_01_price'],
-			),
-			strtolower( str_replace( ' ', '_', $_POST['_extra_02_name'] ) ) => array(
-				'name'        => $_POST['_extra_02_name'],
-				'description' => $_POST['_extra_02_description'],
-				'price'       => $_POST['_extra_02_price'],
-			)
-		);
-//		$extra_01 = [
-//			'name'        => $_POST['_extra_01_name'],
-//			'description' => $_POST['_extra_01_description'],
-//			'price'       => $_POST['_extra_01_price'],
-//		];
-		$arr = serialize( $extras_list );
-		update_post_meta( $service_id, '_extras_list', sanitize_text_field( $arr ) );
+		$extras_list = array();
+		for ( $i = 1; $i <= 5; $i ++ ) {
+			$actual_service  = '_extra_' . $i;
+			$extra_array_key = strtolower( str_replace( ' ', '_', $_POST[ $actual_service . '_name' ] ) );
+			if ( ! empty( $_POST[ $actual_service . '_name' ] ) ) {
+				// Salva il servizio extra
+				$extras_list[ $extra_array_key ] = array(
+					'name'        => $_POST[ $actual_service . '_name' ],
+					'description' => $_POST[ $actual_service . '_description' ],
+					'price'       => $_POST[ $actual_service . '_price' ],
+				);
+			} else {
+				// Inserisci un servizio extra vuoto
+				$extras_list[ 'empty_' . $i ] = array(
+					'name'        => '',
+					'description' => '',
+					'price'       => '',
+				);
+			}
+		}
+
+		$extras_list_serialized = serialize( $extras_list );
+		update_post_meta( $service_id, '_extras_list', sanitize_text_field( $extras_list_serialized ) );
 	}
 }
