@@ -93,13 +93,12 @@ event.keyCode === 46 ? true : !isNaN(Number(event.key))" name="_days_for_deliver
 event.keyCode === 46 ? true : !isNaN(Number(event.key))" name="_price_list" value="' . esc_attr( $quoma_service_price_list ) . '" /></p>';
 
 	// Form per i servizi extra
-	$extras_list_unserialized = unserialize( $quoma_service_extras_list );
 	for ( $i = 0; $i < 5; $i ++ ) {
 		echo '<h2 style="font-weight: bold;">Servizio extra ' . ( $i + 1 ) . '</h2>';
-		echo '<p>Nome: <input type="text" name="_extra_' . ( $i + 1 ) . '_name" value="' . esc_attr( $extras_list_unserialized[ $i ]['name'] ) . '" /></p>';
-		echo '<p>Descrizione: <input type="text" name="_extra_' . ( $i + 1 ) . '_description" value="' . esc_attr( $extras_list_unserialized[ $i ]['description'] ) . '" /></p>';
+		echo '<p>Nome: <input type="text" name="_extra_' . ( $i + 1 ) . '_name" value="' . esc_attr( $quoma_service_extras_list[ $i ]['name'] ) . '" /></p>';
+		echo '<p>Descrizione: <input type="text" name="_extra_' . ( $i + 1 ) . '_description" value="' . esc_attr( $quoma_service_extras_list[ $i ]['description'] ) . '" /></p>';
 		echo '<p>Prezzo: <input type="number" onkeydown="javascript: return event.keyCode === 8 ||
-event.keyCode === 46 ? true : !isNaN(Number(event.key))" name="_extra_' . ( $i + 1 ) . '_price" value="' . esc_attr( $extras_list_unserialized[ $i ]['price'] ) . '" /></p>';
+event.keyCode === 46 ? true : !isNaN(Number(event.key))" name="_extra_' . ( $i + 1 ) . '_price" value="' . esc_attr( $quoma_service_extras_list[ $i ]['price'] ) . '" /></p>';
 	}
 }
 
@@ -139,7 +138,16 @@ function quoma_meta_box_service_save( $service_id ) {
 			}
 		}
 
-		$extras_list_serialized = serialize( $extras_list );
-		update_post_meta( $service_id, '_extras_list', sanitize_text_field( $extras_list_serialized ) );
+		update_post_meta( $service_id, '_extras_list', $extras_list );
 	}
+}
+
+// Template personalizzato per un singolo servizio
+add_filter( 'single_template', 'add_custom_single_template' );
+function add_custom_single_template( $template ) {
+	if ( get_post_type() == 'service' ) {
+		return plugin_dir_path( __FILE__ ) . 'service.php';
+	}
+
+	return $template;
 }
