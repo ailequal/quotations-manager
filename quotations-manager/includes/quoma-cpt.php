@@ -93,12 +93,13 @@ event.keyCode === 46 ? true : !isNaN(Number(event.key))" name="_days_for_deliver
 event.keyCode === 46 ? true : !isNaN(Number(event.key))" name="_price_list" value="' . esc_attr( $quoma_service_price_list ) . '" /></p>';
 
 	// Form per i servizi extra
-	for ( $i = 1; $i <= 5; $i ++ ) {
-		echo '<h2 style="font-weight: bold;">Servizio extra ' . $i . '</h2>';
-		echo '<p>Nome: <input type="text" name="_extra_' . $i . '_name" value="' . '" /></p>';
-		echo '<p>Descrizione: <input type="text" name="_extra_' . $i . '_description" value="' . '" /></p>';
+	$extras_list_unserialized = unserialize( $quoma_service_extras_list );
+	for ( $i = 0; $i < 5; $i ++ ) {
+		echo '<h2 style="font-weight: bold;">Servizio extra ' . ( $i + 1 ) . '</h2>';
+		echo '<p>Nome: <input type="text" name="_extra_' . ( $i + 1 ) . '_name" value="' . esc_attr( $extras_list_unserialized[ $i ]['name'] ) . '" /></p>';
+		echo '<p>Descrizione: <input type="text" name="_extra_' . ( $i + 1 ) . '_description" value="' . esc_attr( $extras_list_unserialized[ $i ]['description'] ) . '" /></p>';
 		echo '<p>Prezzo: <input type="number" onkeydown="javascript: return event.keyCode === 8 ||
-event.keyCode === 46 ? true : !isNaN(Number(event.key))" name="_extra_' . $i . '_price" value="' . '" /></p>';
+event.keyCode === 46 ? true : !isNaN(Number(event.key))" name="_extra_' . ( $i + 1 ) . '_price" value="' . esc_attr( $extras_list_unserialized[ $i ]['price'] ) . '" /></p>';
 	}
 }
 
@@ -117,20 +118,20 @@ function quoma_meta_box_service_save( $service_id ) {
 		update_post_meta( $service_id, '_days_for_delivery', sanitize_text_field( $_POST['_days_for_delivery'] ) );
 		update_post_meta( $service_id, '_price_list', sanitize_text_field( $_POST['_price_list'] ) );
 
+		// Salvataggio servizi extra
 		$extras_list = array();
 		for ( $i = 1; $i <= 5; $i ++ ) {
-			$actual_service  = '_extra_' . $i;
-			$extra_array_key = strtolower( str_replace( ' ', '_', $_POST[ $actual_service . '_name' ] ) );
+			$actual_service = '_extra_' . $i;
 			if ( ! empty( $_POST[ $actual_service . '_name' ] ) ) {
 				// Salva il servizio extra
-				$extras_list[ $extra_array_key ] = array(
+				$extras_list[] = array(
 					'name'        => $_POST[ $actual_service . '_name' ],
 					'description' => $_POST[ $actual_service . '_description' ],
 					'price'       => $_POST[ $actual_service . '_price' ],
 				);
 			} else {
 				// Inserisci un servizio extra vuoto
-				$extras_list[ 'empty_' . $i ] = array(
+				$extras_list[] = array(
 					'name'        => '',
 					'description' => '',
 					'price'       => '',
