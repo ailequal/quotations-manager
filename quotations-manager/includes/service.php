@@ -30,9 +30,15 @@ get_header();
 					echo '<hr>';
 				}
 			}
-			echo '</div>';
 		}
 	}
+
+	if ( current_user_can( 'subscriber' ) ) {
+		echo '<a id="quotation-new" href="#">Richiedi un preventivo</a>';
+	} else {
+		echo '<a href="' . wp_login_url() . '">Effetua il login per richiedere un preventivo</a>';
+	}
+	echo '</div>';
 	?>
 
 </main><!-- #site-content -->
