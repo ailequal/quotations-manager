@@ -14,26 +14,26 @@ get_header();
 <main id="site-content" role="main">
 
 	<?php
-	if ( have_posts() ) :
-		while ( have_posts() ) : the_post(); ?>
-			<div style="text-align: center">
-				<h1><?php the_title(); ?></h1>
-				<p><?php the_content(); ?></p>
-				<?php $extras_list = get_post_meta( get_the_ID(), '_extras_list', true );
-				echo '<h3>Servizi extra disponibili</h3>';
-				foreach ( $extras_list as $key => $extra ) {
-					if ( ! empty( $extra['name'] ) ) {
-						echo $extra['name'];
-						echo '<br>';
-						echo $extra['description'];
-						echo '<br>';
-						echo $extra['price'];
-						echo '<hr>';
-					}
-				} ?>
-			</div>
-		<?php endwhile;
-	endif ?>
+	if ( have_posts() ) {
+		while ( have_posts() ) {
+			the_post();
+			echo '<div style="text-align: center">';
+			the_title( '<h1>', '</h1>' );
+			the_content();
+			$extras_list = get_post_meta( get_the_ID(), '_extras_list', true );
+			echo '<h3>Servizi extra disponibili</h3>';
+			foreach ( $extras_list as $key => $extra ) {
+				if ( ! empty( $extra['name'] ) ) {
+					echo '<h5>' . $extra['name'] . '</h5>';
+					echo '<p>' . $extra['description'] . '</p>';
+					echo '<p>Prezzo servizio extra: ' . $extra['price'] . ' Euro</p>';
+					echo '<hr>';
+				}
+			}
+			echo '</div>';
+		}
+	}
+	?>
 
 </main><!-- #site-content -->
 
