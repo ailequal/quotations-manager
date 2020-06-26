@@ -19,8 +19,18 @@ get_header();
 			<div style="text-align: center">
 				<h1><?php the_title(); ?></h1>
 				<p><?php the_content(); ?></p>
-				<?php $extras_list = get_post_meta( get_the_ID() );
-				var_dump( $extras_list ); ?>
+				<?php $extras_list = get_post_meta( get_the_ID(), '_extras_list', true );
+				echo '<h3>Servizi extra disponibili</h3>';
+				foreach ( $extras_list as $key => $extra ) {
+					if ( ! empty( $extra['name'] ) ) {
+						echo $extra['name'];
+						echo '<br>';
+						echo $extra['description'];
+						echo '<br>';
+						echo $extra['price'];
+						echo '<hr>';
+					}
+				} ?>
 			</div>
 		<?php endwhile;
 	endif ?>
