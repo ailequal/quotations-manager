@@ -1,6 +1,6 @@
 <?php
 /*
- * Creazione CPT
+ * Creazione e gestione del CPT "service"
 */
 
 // Creazione del CPT "service"

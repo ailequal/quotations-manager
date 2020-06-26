@@ -38,8 +38,11 @@ include( plugin_dir_path( __FILE__ ) . 'includes/quoma-pages.php' );
 // Gestione redirect
 include( plugin_dir_path( __FILE__ ) . 'includes/quoma-redirects.php' );
 
-// Creazione CPT
-include( plugin_dir_path( __FILE__ ) . 'includes/quoma-cpt.php' );
+// Creazione e gestione del CPT "service"
+include( plugin_dir_path( __FILE__ ) . 'includes/quoma-cpt-service.php' );
+
+// Creazione e gestione del CPT "quotation"
+include( plugin_dir_path( __FILE__ ) . 'includes/quoma-cpt-quotation.php' );
 
 // Gestione menu
 include( plugin_dir_path( __FILE__ ) . 'includes/quoma-menu.php' );
