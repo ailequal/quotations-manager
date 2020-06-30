@@ -154,21 +154,32 @@ function quoma_enqueue_script_service() {
 	if ( is_singular( 'service' ) ) {
 		wp_enqueue_script( 'service.js', plugins_url( '../js/service.js', __FILE__ ), array( 'jquery' ), false, true );
 		wp_localize_script( 'service.js', 'service', array(
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'alert'    => 'Messaggio di avvertimento',
-				'number' => 10,
+				'ajax_url'   => admin_url( 'admin-ajax.php' ),
+				'nonce'      => wp_create_nonce( 'nonce' ),
+				'service_id' => get_the_ID(),
 			)
 		);
 	}
 }
 
-// quoma_sum API
-add_action( 'wp_ajax_quoma_sum', 'quoma_sum' );
-add_action( 'wp_ajax_nopriv_quoma_sum', 'quoma_sum' );
-function quoma_sum() {
+// API quoma_create_quotation
+add_action( 'wp_ajax_quoma_create_quotation', 'quoma_create_quotation' );
+add_action( 'wp_ajax_nopriv_quoma_create_quotation', 'quoma_create_quotation' );
+function quoma_create_quotation() {
 //	global $wpdb;
-	$number = intval( $_POST['number'] );
-	$number += 10;
-	echo $number;
+//	implementare controlli di sicurezza (soprattutto nonce)
+//	calcolo del prezzo totale del preventivo
+//	prendi prezzo base del servizio
+//	controlla quale servizio extra e' stato scelto
+//	fai somma e restituisci i valori
+	$user_id     = get_current_user_ID();
+	$service_id  = $_POST['service_id'];
+	$description = 'Preventivo numero X, creato in data Y.';
+	$response    = json_encode( [
+		$user_id,
+		$service_id,
+		$description
+	] );
+	echo $response;
 	wp_die();
 }
