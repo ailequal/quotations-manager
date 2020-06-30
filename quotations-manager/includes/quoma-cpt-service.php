@@ -123,6 +123,7 @@ function quoma_meta_box_service_save( $service_id ) {
 					'name'        => $_POST[ $actual_service . '_name' ],
 					'description' => $_POST[ $actual_service . '_description' ],
 					'price'       => $_POST[ $actual_service . '_price' ],
+					'slug'        => strtolower( str_replace( ' ', '_', $_POST[ $actual_service . '_name' ] ) ),
 				);
 			} else {
 				// Inserisci un servizio extra vuoto
@@ -130,6 +131,7 @@ function quoma_meta_box_service_save( $service_id ) {
 					'name'        => '',
 					'description' => '',
 					'price'       => '',
+					'slug'        => '',
 				);
 			}
 		}
