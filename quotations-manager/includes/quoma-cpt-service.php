@@ -152,6 +152,10 @@ function add_custom_single_template( $template ) {
 add_action( 'wp_enqueue_scripts', 'quoma_enqueue_script_service' );
 function quoma_enqueue_script_service() {
 	if ( is_singular( 'service' ) ) {
-		wp_enqueue_script( 'service.js', plugins_url( '../js/service.js', __FILE__ ), '', '', true );
+		wp_enqueue_script( 'service.js', plugins_url( '../js/service.js', __FILE__ ), array( 'jquery' ), false, true );
+		wp_localize_script( 'service.js', 'service', array(
+				'alert' => __( 'Messaggio di avvertimento', 'alert' )
+			)
+		);
 	}
 }

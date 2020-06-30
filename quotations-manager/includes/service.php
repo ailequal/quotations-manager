@@ -41,6 +41,8 @@ get_header();
 	echo '</div>';
 	?>
 
+	<div style="margin-top: 20px; text-align: center;"><a id="click" href="#" style="margin-top: 20px;">Click</a></div>
+
 </main><!-- #site-content -->
 
 <?php get_template_part( 'template-parts/footer-menus-widgets' ); ?>
