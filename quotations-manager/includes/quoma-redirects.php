@@ -51,7 +51,9 @@ function quoma_subscriber_redirect() {
 	if ( is_user_logged_in() ) {
 		$user = wp_get_current_user();
 		if ( $user->has_cap( 'subscriber' ) ) {
-			wp_redirect( home_url() );
+			if ( ! defined( 'DOING_AJAX' ) ) {
+				wp_redirect( home_url() );
+			}
 		}
 	}
 }

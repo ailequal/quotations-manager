@@ -154,8 +154,21 @@ function quoma_enqueue_script_service() {
 	if ( is_singular( 'service' ) ) {
 		wp_enqueue_script( 'service.js', plugins_url( '../js/service.js', __FILE__ ), array( 'jquery' ), false, true );
 		wp_localize_script( 'service.js', 'service', array(
-				'alert' => __( 'Messaggio di avvertimento', 'alert' )
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'alert'    => 'Messaggio di avvertimento',
+				'number' => 10,
 			)
 		);
 	}
+}
+
+// quoma_sum API
+add_action( 'wp_ajax_quoma_sum', 'quoma_sum' );
+add_action( 'wp_ajax_nopriv_quoma_sum', 'quoma_sum' );
+function quoma_sum() {
+//	global $wpdb;
+	$number = intval( $_POST['number'] );
+	$number += 10;
+	echo $number;
+	wp_die();
 }
