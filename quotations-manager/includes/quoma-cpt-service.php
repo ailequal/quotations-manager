@@ -170,8 +170,8 @@ add_action( 'wp_ajax_nopriv_quoma_create_quotation', 'quoma_create_quotation' );
 function quoma_create_quotation() {
 //	global $wpdb;
 //	implementare controlli di sicurezza (soprattutto nonce)
-//	calcolo del prezzo totale del preventivo
 //	prendi prezzo base del servizio
+//	calcolo del prezzo totale del preventivo
 //	controlla quale servizio extra e' stato scelto
 //	fai somma e restituisci i valori
 
@@ -186,6 +186,32 @@ function quoma_create_quotation() {
 	foreach ( $extras_selected as $key => $extra ) {
 		$price_total += $extra['price'];
 	}
+
+	// Creazione di un nuovo preventivo
+	$quotation    = array(
+		'post_title'   => 'Preventivo numero X',
+		'post_content' => 'Contenuto del preventivo.',
+		'post_status'  => 'draft',
+		'post_author'  => get_current_user_id(),
+		'post_type'    => 'quotation',
+//		'tax_input'    => ??
+		'meta_input'   => array(
+			'_user_id'         => $user_id,
+			'_service_id'      => $service_id,
+//			'_description'     => 'Questa e\' una descrizione.',
+			'_price_total'     => $price_total,
+			'_extras_selected' => 'To do.',
+		),
+	);
+	$quotation_id = wp_insert_post( $quotation );
+
+	// Aggiornate informazioni preventivo con il suo ID
+	$quotation = array(
+		'ID'          => $quotation_id,
+		'post_title'  => 'Preventivo numero ' . $quotation_id,
+		'post_status' => 'publish',
+	);
+	wp_update_post( $quotation );
 
 	// Risposta della API
 	$response = json_encode( [

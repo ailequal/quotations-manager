@@ -64,19 +64,19 @@ function quoma_meta_box_quotation_content( $quotation ) {
 	// Creazione dei post meta necessari
 	// '_user_id' --> Utente che ha creato il servizio (lo salvi come autore CPT)
 	add_post_meta( $quotation->ID, '_service_id', '', true );
-	add_post_meta( $quotation->ID, '_description', '', true );
+//	add_post_meta( $quotation->ID, '_description', '', true );
 	add_post_meta( $quotation->ID, '_price_total', '', true );
 	add_post_meta( $quotation->ID, '_extras_selected', '', true );
 
 	// Salvataggio valore post meta nella rispettiva variabile
-	$quoma_quotation_service_id      = get_post_meta( $quotation->ID, '_service_id', true );
-	$quoma_quotation_description     = get_post_meta( $quotation->ID, '_description', true );
+	$quoma_quotation_service_id = get_post_meta( $quotation->ID, '_service_id', true );
+//	$quoma_quotation_description     = get_post_meta( $quotation->ID, '_description', true );
 	$quoma_quotation_price_total     = get_post_meta( $quotation->ID, '_price_total', true );
 	$quoma_quotation_extras_selected = get_post_meta( $quotation->ID, '_extras_selected', true );
 
 	// Visualizzazione dei dati del singolo preventivo
-	echo '<p>Tipologia di servizio: ' . esc_attr( $quoma_quotation_service_id ) . '</p>';
-	echo '<p>Descrizione: ' . esc_attr( $quoma_quotation_description ) . '</p>';
+	echo '<p>Tipologia di servizio: ' . get_the_title( esc_attr( $quoma_quotation_service_id ) ) . '</p>';
+//	echo '<p>Descrizione: ' . esc_attr( $quoma_quotation_description ) . '</p>';
 	echo '<p>Prezzo totale: ' . esc_attr( $quoma_quotation_price_total ) . '</p>';
 	echo '<p>Servizi extra selezionati: ' . esc_attr( $quoma_quotation_extras_selected ) . '</p>';
 }
