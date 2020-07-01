@@ -157,7 +157,7 @@ function quoma_enqueue_script_service() {
 		wp_enqueue_script( 'service.js', plugins_url( '../js/service.js', __FILE__ ), array( 'jquery' ), false, true );
 		wp_localize_script( 'service.js', 'service', array(
 				'ajax_url'   => admin_url( 'admin-ajax.php' ),
-				'nonce'      => wp_create_nonce( 'nonce' ),
+				'nonce'      => wp_create_nonce( 'ajax-nonce' ),
 				'service_id' => get_the_ID(),
 			)
 		);
@@ -166,17 +166,14 @@ function quoma_enqueue_script_service() {
 
 // API quoma_create_quotation
 add_action( 'wp_ajax_quoma_create_quotation', 'quoma_create_quotation' );
-add_action( 'wp_ajax_nopriv_quoma_create_quotation', 'quoma_create_quotation' );
 function quoma_create_quotation() {
-//	global $wpdb;
-//	implementare controlli di sicurezza (soprattutto nonce)
-//	prendi prezzo base del servizio
-//	calcolo del prezzo totale del preventivo
-//	controlla quale servizio extra e' stato scelto
-//	fai somma e restituisci i valori
+	// Controllo nonce
+	$nonce = $_POST['nonce'];
+	if ( ! wp_verify_nonce( $nonce, 'ajax-nonce' ) ) {
+		die ( 'Bloccata richiesta dall\'esterno!!' );
+	}
 
 	// Recupero dati
-	$nonce           = $_POST['nonce'];
 	$user_id         = get_current_user_ID();
 	$service_id      = $_POST['service_id'];
 	$description     = 'Preventivo numero X, creato in data Y.';
@@ -195,11 +192,11 @@ function quoma_create_quotation() {
 		'post_status'  => 'draft',
 		'post_author'  => get_current_user_id(),
 		'post_type'    => 'quotation',
-//		'tax_input'    => ??
+		// 'tax_input'    => '??',
 		'meta_input'   => array(
 			'_user_id'         => $user_id,
 			'_service_id'      => $service_id,
-//			'_description'     => 'Questa e\' una descrizione.',
+			// '_description'     => 'Questa e\' una descrizione.',
 			'_price_total'     => $price_total,
 			'_extras_selected' => $extras_selected,
 		),
@@ -215,13 +212,14 @@ function quoma_create_quotation() {
 	wp_update_post( $quotation );
 
 	// Risposta della API
-	$response = json_encode( [
-		'user_id'         => $user_id,
-		'service_id'      => $service_id,
-		'description'     => $description,
-		'price_total'     => $price_total,
-		'extras_selected' => $extras_selected,
-	] );
+//	$response = json_encode( [
+//		'user_id'         => $user_id,
+//		'service_id'      => $service_id,
+//		'description'     => $description,
+//		'price_total'     => $price_total,
+//		'extras_selected' => $extras_selected,
+//	] );
+	$response = json_encode( 'Preventivo creato correttamente.' );
 	echo $response;
 	wp_die();
 }
