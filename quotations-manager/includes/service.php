@@ -35,14 +35,15 @@ get_header();
 			echo '<h3>Servizi extra disponibili</h3>';
 			foreach ( $extras_list as $key => $extra ) {
 				if ( ! empty( $extra['name'] ) ) {
+					echo '<div class="quoma-extra">';
 					echo '<input class="' . $extra['slug'] . '" type="checkbox" name="' . $extra['slug'] . '" value="' . $extra['slug'] . '">';
 					echo '<label style="font-size:22px; font-weight:bold;" for="' . $extra['slug'] . '">' . $extra['name'] . '</label><br>';
-					echo '<p>' . $extra['description'] . '<br>';
-					echo 'Prezzo servizio extra: <span style="color:red;">' . $extra['price'] . ' Euro</span></p>';
-					echo '<hr>';
+					echo '<div><p>' . $extra['description'] . '</p><br>';
+					echo 'Prezzo servizio extra: <span style="color:red;">' . $extra['price'] . '</span></div>';
+					echo '</div><hr>';
 				}
 			}
-			echo '<a href="#">Invia preventivo</a>';
+			echo '<a id="quoma-create-quotation" href="#">Invia preventivo</a>';
 			echo '</div>';
 		}
 	}

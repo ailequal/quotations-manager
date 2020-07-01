@@ -174,14 +174,36 @@ function quoma_create_quotation() {
 //	prendi prezzo base del servizio
 //	controlla quale servizio extra e' stato scelto
 //	fai somma e restituisci i valori
-	$user_id     = get_current_user_ID();
-	$service_id  = $_POST['service_id'];
-	$description = 'Preventivo numero X, creato in data Y.';
-	$response    = json_encode( [
-		$user_id,
-		$service_id,
-		$description
+
+//	$data            = json_decode( $_POST );
+	$user_id         = get_current_user_ID();
+	$service_id      = $_POST['service_id'];
+	$description     = 'Preventivo numero X, creato in data Y.';
+	$price_total     = 0;
+	$extras_selected = $_POST['extras_selected'];
+//	$debug           = '';
+
+	// Calcolo del prezzo totale del preventivo
+//	foreach ( $extras_selected as $key => $extra ) {
+//		$tempppp = json_decode( $extra, true );
+//		$debug   = $tempppp;
+//		$debug = $extra->price;
+//		$price_total = $price_total + $extra->price;
+//	}
+
+	$response = json_encode( [
+		'user_id'         => $user_id,
+		'service_id'      => $service_id,
+		'description'     => $description,
+		'price_total'     => $price_total,
+		'extras_selected' => $extras_selected,
+//		'debug'           => $debug,
 	] );
 	echo $response;
+
+//	$response = json_encode( $debug );
+//	var_dump( json_decode( $_POST['extras_selected'], true ) );
+//	var_dump( $_POST );
+
 	wp_die();
 }
