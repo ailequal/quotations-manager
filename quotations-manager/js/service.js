@@ -24,6 +24,7 @@ jQuery(document).ready(function ($) {
         extras_selected.push(extra);
       }
     });
+    extras_selected = JSON.stringify(extras_selected);
 
     // Chiamata AJAX per la creazione di un nuovo preventivo
     $.ajax({

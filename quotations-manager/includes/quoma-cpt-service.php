@@ -176,11 +176,12 @@ function quoma_create_quotation() {
 //	fai somma e restituisci i valori
 
 	// Recupero dati
+	$nonce           = $_POST['nonce'];
 	$user_id         = get_current_user_ID();
 	$service_id      = $_POST['service_id'];
 	$description     = 'Preventivo numero X, creato in data Y.';
 	$price_total     = get_post_meta( $service_id, '_price_list', true );
-	$extras_selected = $_POST['extras_selected'];
+	$extras_selected = json_decode( stripslashes( $_POST['extras_selected'] ), true );
 
 	// Calcolo del prezzo totale del preventivo
 	foreach ( $extras_selected as $key => $extra ) {
@@ -200,7 +201,7 @@ function quoma_create_quotation() {
 			'_service_id'      => $service_id,
 //			'_description'     => 'Questa e\' una descrizione.',
 			'_price_total'     => $price_total,
-			'_extras_selected' => 'To do.',
+			'_extras_selected' => $extras_selected,
 		),
 	);
 	$quotation_id = wp_insert_post( $quotation );
