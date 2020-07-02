@@ -31,7 +31,7 @@ function quoma_create_quotation() {
 		'post_title'   => 'Preventivo numero X',
 		'post_content' => 'Contenuto del preventivo.',
 		'post_status'  => 'draft',
-		'post_author'  => get_current_user_id(),
+		'post_author'  => $user_id,
 		'post_type'    => 'quotation',
 		'meta_input'   => array(
 			'_user_id'         => $user_id,
@@ -49,6 +49,12 @@ function quoma_create_quotation() {
 		'post_status' => 'publish',
 	);
 	wp_update_post( $quotation );
+
+	// Invio email di notifica all'amministratore
+	$admin_email = get_bloginfo( 'admin_email' );
+	$subject     = 'Creato preventivo numero ' . $quotation_id;
+	$message     = 'L\'utente ' . get_userdata( $user_id )->user_login . ' ha creato un nuovo preventivo per un totale di ' . get_post_meta( $quotation_id, '_price_total', true ) . ' Euro.';
+	wp_mail( $admin_email, $subject, $message );
 
 	// Risposta della API
 	$response = json_encode( 'Preventivo creato correttamente.' );
