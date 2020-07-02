@@ -23,7 +23,7 @@ get_header();
 		// Visualizzare tutti i suoi preventivi
 		echo '<div style="text-align: center">';
 		echo '<h1>I miei preventivi</h1>';
-		echo '<h5>Lista di tutti i preventivi richiesti da ' . $user_name . '.</h5>';
+		echo '<h5>Lista di tutti i preventivi richiesti da <span style="color:red;">' . $user_name . '</span>.</h5>';
 
 		// Inizio custom loop
 		$args  = array(
@@ -35,9 +35,25 @@ get_header();
 		if ( $query->have_posts() ) {
 			while ( $query->have_posts() ) {
 				$query->the_post();
-//				var_dump( $query );
-				the_title( '<h3>', '</h3>' );
-				the_content();
+				$service_id         = get_post_meta( get_the_ID(), '_service_id', true );
+				$service_name       = get_post( $service_id )->post_title;
+				$service_price_list = get_post_meta( $service_id, '_price_list', true );
+				$extras_selected    = get_post_meta( get_the_ID(), '_extras_selected', true );
+				$price_total        = get_post_meta( get_the_ID(), '_price_total', true );
+				the_title( '<h3 style="color:blue;">', '</h3>' );
+				echo '<h4>Servizio selezionato: <span style="color:red;">' . $service_name . '</span>.</h4>';
+				echo '<h5>Prezzo base di <span style="color:red;">' . $service_price_list . ' Euro</span>.</h5>';
+				if ( ! empty( $extras_selected ) ) {
+					echo '<h4>Servizi extra selezionati: </h4>';
+					foreach ( $extras_selected as $key => $extra ) {
+						echo '<h6>' . $extra['name'] . '</h6>';
+						echo '<p>' . $extra['description'] . ' Prezzo: ';
+						echo '<span style="color:red;">' . $extra['price'] . ' Euro</span></p>';
+					}
+				} else {
+					echo '<h4>Nessun servizio extra selezionato.</h4>';
+				}
+				echo '<h3>Prezzo totale del preventivo: <span style="color:red;">' . $price_total . ' Euro</span>.</h3><hr>';
 				wp_reset_postdata();
 			}
 		} else {
