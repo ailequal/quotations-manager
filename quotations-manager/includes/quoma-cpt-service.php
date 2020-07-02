@@ -141,8 +141,8 @@ function quoma_meta_box_service_save( $service_id ) {
 }
 
 // Template personalizzato per un singolo servizio
-add_filter( 'single_template', 'add_custom_single_template' );
-function add_custom_single_template( $template ) {
+add_filter( 'single_template', 'quoma_template_service' );
+function quoma_template_service( $template ) {
 	if ( get_post_type() == 'service' ) {
 		return plugin_dir_path( __FILE__ ) . 'service.php';
 	}

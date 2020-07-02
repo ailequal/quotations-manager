@@ -28,7 +28,7 @@ function quoma_create_miei_preventivi() {
 		$args = array(
 			'post_title'   => 'I miei preventivi',
 			'post_name'    => 'miei-preventivi',
-			'post_content' => 'Lista dei preventivi generati da $nome_utente:',
+			'post_content' => 'Lista di tutti i preventivi richiesti.',
 			'post_status'  => 'publish',
 			'post_author'  => 1,
 			'post_type'    => 'page'

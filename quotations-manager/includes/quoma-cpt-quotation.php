@@ -85,3 +85,13 @@ function quoma_meta_box_quotation_content( $quotation ) {
 	}
 	echo '<h3>Prezzo totale: ' . esc_attr( $quoma_quotation_price_total ) . ' Euro' . '</h3>';
 }
+
+// Template personalizzato per la pagina 'miei-preventivi'
+add_filter( 'page_template', 'quoma_template_quotation' );
+function quoma_template_quotation( $template ) {
+	if ( is_page( 'miei-preventivi' ) ) {
+		return plugin_dir_path( __FILE__ ) . 'quotation.php';
+	}
+
+	return $template;
+}
