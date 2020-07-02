@@ -39,6 +39,7 @@ jQuery(document).ready(function ($) {
       },
       success: function (response, data, state) {
         console.log(response);
+        window.location.href = service.miei_preventivi;
       },
       error: function (request, state, error) {
         console.log(error);

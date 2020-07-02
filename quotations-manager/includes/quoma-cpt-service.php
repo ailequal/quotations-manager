@@ -156,9 +156,10 @@ function quoma_enqueue_script_service() {
 	if ( is_singular( 'service' ) ) {
 		wp_enqueue_script( 'service.js', plugins_url( '../js/service.js', __FILE__ ), array( 'jquery' ), false, true );
 		wp_localize_script( 'service.js', 'service', array(
-				'ajax_url'   => admin_url( 'admin-ajax.php' ),
-				'nonce'      => wp_create_nonce( 'ajax-nonce' ),
-				'service_id' => get_the_ID(),
+				'ajax_url'        => admin_url( 'admin-ajax.php' ),
+				'nonce'           => wp_create_nonce( 'ajax-nonce' ),
+				'service_id'      => get_the_ID(),
+				'miei_preventivi' => get_permalink( get_page_by_path( 'miei-preventivi' ) ),
 			)
 		);
 	}
