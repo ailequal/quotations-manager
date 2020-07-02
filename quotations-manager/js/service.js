@@ -14,7 +14,7 @@ jQuery(document).ready(function ($) {
     $('.quoma-extra').each(function () {
       // Controllo che il servizio extra sia stato selezionato
       if ($(this).find('input').is(':checked')) {
-        // Salvataggio dati in un array
+        // Salvataggio dati in un oggetto
         let extra = {
           'name': $(this).find('label').text(), // name
           'description': $(this).find('p').text(), // description

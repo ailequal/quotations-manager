@@ -40,7 +40,6 @@ function quoma_create_post_type_quotations() {
 		'show_in_menu'         => true,
 		'show_in_rest'         => true,
 		'query_var'            => false,
-//		'capability_type'    => 'quotation',
 		'has_archive'          => false,
 		'hierarchical'         => true,
 		'menu_position'        => null,
@@ -64,13 +63,11 @@ function quoma_meta_box_quotation_content( $quotation ) {
 	// Creazione dei post meta necessari
 	// '_user_id' --> Utente che ha creato il servizio (lo salvi come autore CPT)
 	add_post_meta( $quotation->ID, '_service_id', '', true );
-//	add_post_meta( $quotation->ID, '_description', '', true );
 	add_post_meta( $quotation->ID, '_price_total', '', true );
 	add_post_meta( $quotation->ID, '_extras_selected', '', true );
 
 	// Salvataggio valore post meta nella rispettiva variabile
-	$quoma_quotation_service_id = get_post_meta( $quotation->ID, '_service_id', true );
-//	$quoma_quotation_description     = get_post_meta( $quotation->ID, '_description', true );
+	$quoma_quotation_service_id      = get_post_meta( $quotation->ID, '_service_id', true );
 	$quoma_quotation_price_list      = get_post_meta( $quoma_quotation_service_id, '_price_list', true );
 	$quoma_quotation_price_total     = get_post_meta( $quotation->ID, '_price_total', true );
 	$quoma_quotation_extras_selected = get_post_meta( $quotation->ID, '_extras_selected', true );
@@ -78,10 +75,13 @@ function quoma_meta_box_quotation_content( $quotation ) {
 	// Visualizzazione dei dati del singolo preventivo
 	echo '<h3>Tipologia di servizio:</h3>';
 	echo '<h4>' . get_the_title( esc_attr( $quoma_quotation_service_id ) ) . ' (' . $quoma_quotation_price_list . ' Euro)</h4>';
-//	echo '<p>Descrizione: ' . esc_attr( $quoma_quotation_description ) . '</p>';
-	echo '<h3>Servizi extra selezionati:</h3>';
-	foreach ( $quoma_quotation_extras_selected as $key => $extra ) {
-		echo '<h4>' . esc_attr( $extra['name'] ) . ' (' . $extra['price'] . ' Euro)<h4>';
+	if ( ! empty( $quoma_quotation_extras_selected ) ) {
+		echo '<h3>Servizi extra selezionati:</h3>';
+		foreach ( $quoma_quotation_extras_selected as $key => $extra ) {
+			echo '<h4>' . esc_attr( $extra['name'] ) . ' (' . $extra['price'] . ' Euro)<h4>';
+		}
+	} else {
+		echo '<h3>Nessun servizio extra selezionato</h3>';
 	}
 	echo '<h3>Prezzo totale: ' . esc_attr( $quoma_quotation_price_total ) . ' Euro' . '</h3>';
 }

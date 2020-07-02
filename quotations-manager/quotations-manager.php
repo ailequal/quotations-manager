@@ -47,6 +47,9 @@ include( plugin_dir_path( __FILE__ ) . 'includes/quoma-cpt-quotation.php' );
 // Gestione menu
 include( plugin_dir_path( __FILE__ ) . 'includes/quoma-menu.php' );
 
+// AJAX API
+include( plugin_dir_path( __FILE__ ) . 'includes/quoma-ajax.php' );
+
 
 /*
  * register_deactivation_hook()
