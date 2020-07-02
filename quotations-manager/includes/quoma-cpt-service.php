@@ -89,12 +89,24 @@ event.keyCode === 46 ? true : !isNaN(Number(event.key))" name="_days_for_deliver
 event.keyCode === 46 ? true : !isNaN(Number(event.key))" name="_price_list" value="' . esc_attr( $quoma_service_price_list ) . '" /></p>';
 
 	// Form per i servizi extra
-	for ( $i = 0; $i < 5; $i ++ ) {
-		echo '<h2 style="font-weight: bold;">Servizio extra ' . ( $i + 1 ) . '</h2>';
-		echo '<p>Nome: <input type="text" name="_extra_' . ( $i + 1 ) . '_name" value="' . esc_attr( $quoma_service_extras_list[ $i ]['name'] ) . '" /></p>';
-		echo '<p>Descrizione: <input type="text" name="_extra_' . ( $i + 1 ) . '_description" value="' . esc_attr( $quoma_service_extras_list[ $i ]['description'] ) . '" /></p>';
-		echo '<p>Prezzo: <input type="number" onkeydown="javascript: return event.keyCode === 8 ||
+	if ( empty( $quoma_service_extras_list ) ) {
+		// Se stai creando un nuovo servizio
+		for ( $i = 0; $i < 5; $i ++ ) {
+			echo '<h2 style="font-weight: bold;">Servizio extra ' . ( $i + 1 ) . '</h2>';
+			echo '<p>Nome: <input type="text" name="_extra_' . ( $i + 1 ) . '_name" value="" /></p>';
+			echo '<p>Descrizione: <input type="text" name="_extra_' . ( $i + 1 ) . '_description" value="" /></p>';
+			echo '<p>Prezzo: <input type="number" onkeydown="javascript: return event.keyCode === 8 ||
+event.keyCode === 46 ? true : !isNaN(Number(event.key))" name="_extra_' . ( $i + 1 ) . '_price" value="" /></p>';
+		}
+	} else {
+		// Se stai aggiornando un servizio esistente
+		for ( $i = 0; $i < 5; $i ++ ) {
+			echo '<h2 style="font-weight: bold;">Servizio extra ' . ( $i + 1 ) . '</h2>';
+			echo '<p>Nome: <input type="text" name="_extra_' . ( $i + 1 ) . '_name" value="' . esc_attr( $quoma_service_extras_list[ $i ]['name'] ) . '" /></p>';
+			echo '<p>Descrizione: <input type="text" name="_extra_' . ( $i + 1 ) . '_description" value="' . esc_attr( $quoma_service_extras_list[ $i ]['description'] ) . '" /></p>';
+			echo '<p>Prezzo: <input type="number" onkeydown="javascript: return event.keyCode === 8 ||
 event.keyCode === 46 ? true : !isNaN(Number(event.key))" name="_extra_' . ( $i + 1 ) . '_price" value="' . esc_attr( $quoma_service_extras_list[ $i ]['price'] ) . '" /></p>';
+		}
 	}
 }
 
