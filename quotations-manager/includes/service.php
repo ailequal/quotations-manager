@@ -20,6 +20,8 @@ get_header();
 			the_post();
 			echo '<div style="text-align: center">';
 			the_title( '<h1>', '</h1>' );
+			$price_list = get_post_meta( get_the_ID(), '_price_list', true );
+			echo '<h3>Prezzo di base: ' . $price_list . ' Euro.</h3>';
 			the_content();
 
 			// Controllo se l'utente e' loggato come 'subscriber'
