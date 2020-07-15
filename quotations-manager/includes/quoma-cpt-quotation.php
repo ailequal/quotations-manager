@@ -40,6 +40,7 @@ function quoma_create_post_type_quotations() {
 		'show_in_menu'         => true,
 		'show_in_rest'         => true,
 		'query_var'            => false,
+		'capability_type'      => 'post',
 		'has_archive'          => false,
 		'hierarchical'         => true,
 		'menu_position'        => null,

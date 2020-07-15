@@ -57,12 +57,3 @@ function quoma_subscriber_redirect() {
 		}
 	}
 }
-
-// Eseguire il redirect da "servizio" a "servizi"
-add_action( 'template_redirect', 'quoma_custom_redirect_servizio' );
-function quoma_custom_redirect_servizio() {
-	if ( is_post_type_archive( 'service' ) ) {
-		wp_redirect( get_permalink( get_page_by_path( 'servizi' ) ) );
-		die;
-	}
-}
