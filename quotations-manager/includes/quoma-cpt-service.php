@@ -1,10 +1,12 @@
 <?php
-/*
- * Creazione e gestione del CPT "service"
-*/
+/**
+ * Creazione e gestione del CPT "service".
+ */
 
-// Creazione del CPT "service"
-add_action( 'init', 'quoma_create_post_type_services' );
+
+/**
+ * Creazione del CPT "service".
+ */
 function quoma_create_post_type_services() {
 	$labels = array(
 		'name'                  => _x( 'Servizi', 'Post type general name', 'quotations-manager' ),
@@ -57,12 +59,22 @@ function quoma_create_post_type_services() {
 	register_post_type( 'service', $args );
 }
 
-// Creazione della meta box per "service"
+add_action( 'init', 'quoma_create_post_type_services' );
+
+
+/**
+ * Creazione della meta box per "service".
+ */
 function quoma_meta_box_service() {
 	add_meta_box( 'quoma-service', 'Dettagli servizio', 'quoma_meta_box_service_content', 'service', 'normal', 'default' );
 }
 
-// Funzione di callback per add_meta_box()
+
+/**
+ * Funzione di callback per add_meta_box().
+ *
+ * @param object $service L'oggetto servizio appena creato.
+ */
 function quoma_meta_box_service_content( $service ) {
 	// Creazione dei post meta necessari
 	add_post_meta( $service->ID, '_name', '', true );
@@ -110,8 +122,12 @@ event.keyCode === 46 ? true : !isNaN(Number(event.key))" name="_extra_' . ( $i +
 	}
 }
 
-// Salvataggio dei post meta aggiornati
-add_action( 'save_post_service', 'quoma_meta_box_service_save' );
+
+/**
+ * Salvataggio dei post meta aggiornati.
+ *
+ * @param int $service_id L'ID del servizio aggiornato.
+ */
 function quoma_meta_box_service_save( $service_id ) {
 	if ( ! empty( $_POST['_name'] ) ) {
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
@@ -152,8 +168,16 @@ function quoma_meta_box_service_save( $service_id ) {
 	}
 }
 
-// Template personalizzato per un singolo servizio
-add_filter( 'single_template', 'quoma_template_service' );
+add_action( 'save_post_service', 'quoma_meta_box_service_save' );
+
+
+/**
+ * Template personalizzato per un singolo servizio.
+ *
+ * @param object $template Il modello che viene caricato di default.
+ *
+ * @return string Il modello da caricare personalizzato per la visualizzazione della pagina richiesta.
+ */
 function quoma_template_service( $template ) {
 	if ( get_post_type() == 'service' ) {
 		return plugin_dir_path( __FILE__ ) . 'service.php';
@@ -162,8 +186,12 @@ function quoma_template_service( $template ) {
 	return $template;
 }
 
-// Codice JavaScript per i servizi
-add_action( 'wp_enqueue_scripts', 'quoma_enqueue_script_service' );
+add_filter( 'single_template', 'quoma_template_service' );
+
+
+/**
+ * Codice JavaScript per i servizi.
+ */
 function quoma_enqueue_script_service() {
 	if ( is_singular( 'service' ) ) {
 		wp_enqueue_script( 'service.js', plugins_url( '../js/service.js', __FILE__ ), array( 'jquery' ), false, true );
@@ -176,3 +204,5 @@ function quoma_enqueue_script_service() {
 		);
 	}
 }
+
+add_action( 'wp_enqueue_scripts', 'quoma_enqueue_script_service' );
