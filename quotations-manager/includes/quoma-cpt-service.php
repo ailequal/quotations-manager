@@ -161,10 +161,8 @@ function quoma_meta_box_service_content( $service ) {
 	echo '<h2 style="font-weight: bold;">Informazioni basilari</h2>';
 	echo '<p>Nome: <input type="text" name="_name" value="' . esc_attr( $quoma_service_name ) . '" /></p>';
 	echo '<p>Descrizione: <input type="text" name="_description" value="' . esc_attr( $quoma_service_description ) . '" /></p>';
-	echo '<p>Giorni per la consegna: <input type="number" onkeydown="javascript: return event.keyCode === 8 ||
-event.keyCode === 46 ? true : !isNaN(Number(event.key))" name="_days_for_delivery" value="' . esc_attr( $quoma_service_days_for_delivery ) . '" /></p>';
-	echo '<p>Prezzo di partenza: <input type="number" onkeydown="javascript: return event.keyCode === 8 ||
-event.keyCode === 46 ? true : !isNaN(Number(event.key))" name="_price_list" value="' . esc_attr( $quoma_service_price_list ) . '" /></p>';
+	echo '<p>' . get_option( 'quoma_options' )['option_label'] . ': <input type="number" name="_days_for_delivery" value="' . esc_attr( $quoma_service_days_for_delivery ) . '" /></p>';
+	echo '<p>Prezzo di partenza: <input type="number" name="_price_list" value="' . esc_attr( $quoma_service_price_list ) . '" /></p>';
 
 	// Form per i servizi extra
 	if ( empty( $quoma_service_extras_list ) ) {
@@ -173,8 +171,7 @@ event.keyCode === 46 ? true : !isNaN(Number(event.key))" name="_price_list" valu
 			echo '<h2 style="font-weight: bold;">Servizio extra ' . ( $i + 1 ) . '</h2>';
 			echo '<p>Nome: <input type="text" name="_extra_' . ( $i + 1 ) . '_name" value="" /></p>';
 			echo '<p>Descrizione: <input type="text" name="_extra_' . ( $i + 1 ) . '_description" value="" /></p>';
-			echo '<p>Prezzo: <input type="number" onkeydown="javascript: return event.keyCode === 8 ||
-event.keyCode === 46 ? true : !isNaN(Number(event.key))" name="_extra_' . ( $i + 1 ) . '_price" value="" /></p>';
+			echo '<p>Prezzo: <input type="number" name="_extra_' . ( $i + 1 ) . '_price" value="" /></p>';
 		}
 	} else {
 		// Se stai aggiornando un servizio esistente
@@ -182,8 +179,7 @@ event.keyCode === 46 ? true : !isNaN(Number(event.key))" name="_extra_' . ( $i +
 			echo '<h2 style="font-weight: bold;">Servizio extra ' . ( $i + 1 ) . '</h2>';
 			echo '<p>Nome: <input type="text" name="_extra_' . ( $i + 1 ) . '_name" value="' . esc_attr( $quoma_service_extras_list[ $i ]['name'] ) . '" /></p>';
 			echo '<p>Descrizione: <input type="text" name="_extra_' . ( $i + 1 ) . '_description" value="' . esc_attr( $quoma_service_extras_list[ $i ]['description'] ) . '" /></p>';
-			echo '<p>Prezzo: <input type="number" onkeydown="javascript: return event.keyCode === 8 ||
-event.keyCode === 46 ? true : !isNaN(Number(event.key))" name="_extra_' . ( $i + 1 ) . '_price" value="' . esc_attr( $quoma_service_extras_list[ $i ]['price'] ) . '" /></p>';
+			echo '<p>Prezzo: <input type="number" name="_extra_' . ( $i + 1 ) . '_price" value="' . esc_attr( $quoma_service_extras_list[ $i ]['price'] ) . '" /></p>';
 		}
 	}
 }

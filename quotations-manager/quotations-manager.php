@@ -49,7 +49,7 @@ add_action( 'admin_notices', 'quoma_admin_notices' );
 /**
  * Tutti i file necessari per il funzionamente del plugin.
  */
-// Pagina delle opzioni del plugin lato amministratore
+// Opzioni del plugin.
 include( plugin_dir_path( __FILE__ ) . 'includes/quoma-options.php' );
 
 // Creazione delle pagine

@@ -1,24 +1,7 @@
 <?php
 /**
- * Pagina delle opzioni del plugin lato amministratore.
+ * Opzioni del plugin.
  */
-
-
-/**
- * Salvataggio della etichetta personalizzate per i servizi.
- */
-//if ( ! get_option( 'quoma_options' ) ) {
-//	$quoma_options_arr = array(
-//		'quoma_service_custom_label' => 'Etichetta personalizzata.'
-//	);
-//
-//	add_option( 'quoma_options', $quoma_options_arr );
-//}
-
-//$quoma_options_arr = array(
-//	'quoma_service_custom_label' => 'OH WOW!!'
-//);
-//update_option( 'quoma_options', $quoma_options_arr );
 
 
 /**
@@ -32,7 +15,7 @@ function quoma_main_menu() {
 		'quoma_main_menu',
 		'quoma_main_menu_page',
 		plugins_url( 'quotations-manager/images/quotations-manager.svg' ),
-		null
+		30
 	);
 
 	function quoma_register_settings() {
@@ -51,22 +34,32 @@ function quoma_main_menu() {
 
 	add_action( 'admin_init', 'quoma_register_settings' );
 
+	// Crea una etichetta di default se vuota
+	if ( ! get_option( 'quoma_options' ) || empty( get_option( 'quoma_options' )['option_label'] ) ) {
+		$quoma_options_arr = array(
+			'option_label' => 'Etichetta personalizzata'
+		);
+		update_option( 'quoma_options', $quoma_options_arr );
+	}
+
+	// Pagina delle opzioni
 	function quoma_main_menu_page() {
 		?>
 		<div class="wrap">
-			<h2>Quotations Manager Options</h2>
+			<h2>Quotations Manager</h2>
+			<h3>Opzioni</h3>
 			<form method="post" action="options.php">
 				<?php settings_fields( 'quoma-settings-group' ); ?>
 				<?php $quoma_options = get_option( 'quoma_options' ); ?>
 				<table class="form-table">
 					<tr valign="top">
-						<th scope="row">Etichetta personalizzata</th>
+						<th scope="row">Etichetta personalizzata per il CPT "Servizi"</th>
 						<td><input type="text" name="quoma_options[option_label]"
 								   value="<?php echo esc_attr( $quoma_options['option_label'] ); ?>"/></td>
 					</tr>
 				</table>
 				<p class="submit">
-					<input type="submit" class="button-primary" value="Save Changes"/>
+					<input type="submit" class="button-primary" value="Salva"/>
 				</p>
 			</form>
 		</div>
