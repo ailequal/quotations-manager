@@ -1,12 +1,14 @@
 <?php
-/*
+/**
  * Creazione pagine
  */
 
-// Creazione della pagina "servizi"
-add_action( 'init', 'quoma_create_servizi' );
-// Se la pagina "miei-preventivi" non esiste, creala
+
+/**
+ * Creazione della pagina "servizi"
+ */
 function quoma_create_servizi() {
+	// Se la pagina "miei-preventivi" non esiste, creala
 	if ( get_page_by_path( 'servizi' ) === null ) {
 		$args = array(
 			'post_title'   => 'Servizi',
@@ -20,10 +22,14 @@ function quoma_create_servizi() {
 	}
 }
 
-// Creazione della pagina "miei-preventivi"
-add_action( 'init', 'quoma_create_miei_preventivi' );
-// Se la pagina "miei-preventivi" non esiste, creala
+add_action( 'init', 'quoma_create_servizi' );
+
+
+/**
+ * Creazione della pagina "miei-preventivi"
+ */
 function quoma_create_miei_preventivi() {
+	// Se la pagina "miei-preventivi" non esiste, creala
 	if ( get_page_by_path( 'miei-preventivi' ) === null ) {
 		$args = array(
 			'post_title'   => 'I miei preventivi',
@@ -37,10 +43,14 @@ function quoma_create_miei_preventivi() {
 	}
 }
 
-// Creazione della pagina "accesso-negato"
-add_action( 'init', 'quoma_create_accesso_negato' );
-// Se la pagina "accesso-negato" non esiste, creala
+add_action( 'init', 'quoma_create_miei_preventivi' );
+
+
+/**
+ * Creazione della pagina "accesso-negato"
+ */
 function quoma_create_accesso_negato() {
+	// Se la pagina "accesso-negato" non esiste, creala
 	if ( get_page_by_path( 'accesso-negato' ) === null ) {
 		$args = array(
 			'post_title'   => 'Accesso negato',
@@ -53,3 +63,5 @@ function quoma_create_accesso_negato() {
 		wp_insert_post( $args );
 	}
 }
+
+add_action( 'init', 'quoma_create_accesso_negato' );

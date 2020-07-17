@@ -8,4 +8,4 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	die;
 }
 
-// azioni da definire
+// Azioni da definire

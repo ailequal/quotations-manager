@@ -1,10 +1,12 @@
 <?php
-/*
+/**
  * Creazione e gestione del CPT "quotation"
-*/
+ */
 
-// Creazione del CPT "quotation"
-add_action( 'init', 'quoma_create_post_type_quotations' );
+
+/**
+ * Creazione del CPT "quotation"
+ */
 function quoma_create_post_type_quotations() {
 	$labels = array(
 		'name'                  => _x( 'Preventivi', 'Post type general name', 'quotations-manager' ),
@@ -48,18 +50,27 @@ function quoma_create_post_type_quotations() {
 			'title',
 			'author',
 		),
-		'taxonomies'           => array( 'category', 'post_tag' ),
 		'register_meta_box_cb' => 'quoma_meta_box_quotation',
 	);
 	register_post_type( 'quotation', $args );
 }
 
-// Creazione della meta box per "quotation"
+add_action( 'init', 'quoma_create_post_type_quotations' );
+
+
+/**
+ * Creazione della meta box per "quotation"
+ */
 function quoma_meta_box_quotation() {
 	add_meta_box( 'quoma-quotation', 'Informazioni preventivo', 'quoma_meta_box_quotation_content', 'quotation', 'normal', 'default' );
 }
 
-// Funzione di callback per add_meta_box()
+
+/**
+ * Funzione di callback per add_meta_box()
+ *
+ * @param object $quotation L'oggetto preventivo appena creato.
+ */
 function quoma_meta_box_quotation_content( $quotation ) {
 	// Creazione dei post meta necessari
 	// '_user_id' --> Utente che ha creato il servizio (lo salvi come autore CPT)
@@ -87,8 +98,14 @@ function quoma_meta_box_quotation_content( $quotation ) {
 	echo '<h3>Prezzo totale: ' . esc_attr( $quoma_quotation_price_total ) . ' Euro' . '</h3>';
 }
 
-// Template personalizzato per la pagina 'miei-preventivi'
-add_filter( 'page_template', 'quoma_template_quotation' );
+
+/**
+ * Template personalizzato per la pagina 'miei-preventivi'
+ *
+ * @param object $template Il modello che viene caricato di default.
+ *
+ * @return string Il modello da caricare personalizzato per la visualizzazione della pagina richiesta.
+ */
 function quoma_template_quotation( $template ) {
 	if ( is_page( 'miei-preventivi' ) ) {
 		return plugin_dir_path( __FILE__ ) . 'quotation.php';
@@ -96,3 +113,5 @@ function quoma_template_quotation( $template ) {
 
 	return $template;
 }
+
+add_filter( 'page_template', 'quoma_template_quotation' );
