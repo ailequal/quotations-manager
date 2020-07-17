@@ -28,6 +28,7 @@ function quoma_install() {
 
 register_activation_hook( __FILE__, 'quoma_install' );
 
+
 /**
  * Messaggio di notifica di creazione delle pagine all'attivazione del plugin.
  */
@@ -48,6 +49,9 @@ add_action( 'admin_notices', 'quoma_admin_notices' );
 /**
  * Tutti i file necessari per il funzionamente del plugin.
  */
+// Pagina delle opzioni del plugin lato amministratore
+include( plugin_dir_path( __FILE__ ) . 'includes/quoma-options.php' );
+
 // Creazione delle pagine
 include( plugin_dir_path( __FILE__ ) . 'includes/quoma-pages.php' );
 
@@ -59,9 +63,6 @@ include( plugin_dir_path( __FILE__ ) . 'includes/quoma-cpt-service.php' );
 
 // Creazione e gestione del CPT "quotation"
 include( plugin_dir_path( __FILE__ ) . 'includes/quoma-cpt-quotation.php' );
-
-// Gestione menu
-include( plugin_dir_path( __FILE__ ) . 'includes/quoma-menu.php' );
 
 // AJAX API
 include( plugin_dir_path( __FILE__ ) . 'includes/quoma-ajax.php' );
