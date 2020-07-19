@@ -163,31 +163,28 @@ function quoma_meta_box_service_content( $service ) {
 	echo '<p>Descrizione: <input type="text" name="_description" value="' . esc_attr( $quoma_service_description ) . '" /></p>';
 	echo '<p>' . get_option( 'quoma_options' )['option_label'] . ': <input type="number" name="_days_for_delivery" value="' . esc_attr( $quoma_service_days_for_delivery ) . '" /></p>';
 	echo '<p>Prezzo di partenza: <input type="number" name="_price_list" value="' . esc_attr( $quoma_service_price_list ) . '" /></p>';
+	echo '<hr>';
 
 	// Pulsante per aggiungere un nuovo box per un servizio extra
 	echo '<button class="quoma-add-extra-service" type="button">Aggiungi un servizio extra</button>';
 
 	// Container per tutti i servizi extra
-	echo '<div class="quoma-container-extra-service"></div>';
+	echo '<div class="quoma-container-extra-service">';
 
-//	// Form per i servizi extra
-//	if ( empty( $quoma_service_extras_list ) ) {
-//		// Se stai creando un nuovo servizio
-//		for ( $i = 0; $i < 5; $i ++ ) {
-//			echo '<h2 style="font-weight: bold;">Servizio extra ' . ( $i + 1 ) . '</h2>';
-//			echo '<p>Nome: <input type="text" name="_extra_' . ( $i + 1 ) . '_name" value="" /></p>';
-//			echo '<p>Descrizione: <input type="text" name="_extra_' . ( $i + 1 ) . '_description" value="" /></p>';
-//			echo '<p>Prezzo: <input type="number" name="_extra_' . ( $i + 1 ) . '_price" value="" /></p>';
-//		}
-//	} else {
-//		// Se stai aggiornando un servizio esistente
-//		for ( $i = 0; $i < 5; $i ++ ) {
-//			echo '<h2 style="font-weight: bold;">Servizio extra ' . ( $i + 1 ) . '</h2>';
-//			echo '<p>Nome: <input type="text" name="_extra_' . ( $i + 1 ) . '_name" value="' . esc_attr( $quoma_service_extras_list[ $i ]['name'] ) . '" /></p>';
-//			echo '<p>Descrizione: <input type="text" name="_extra_' . ( $i + 1 ) . '_description" value="' . esc_attr( $quoma_service_extras_list[ $i ]['description'] ) . '" /></p>';
-//			echo '<p>Prezzo: <input type="number" name="_extra_' . ( $i + 1 ) . '_price" value="' . esc_attr( $quoma_service_extras_list[ $i ]['price'] ) . '" /></p>';
-//		}
-//	}
+	// Richiama i servizi extra gia' salvati, se presenti
+	if ( ! empty( $quoma_service_extras_list ) ) {
+		foreach ( $quoma_service_extras_list as $key => $value ) {
+			echo '<div class="quoma-box-extra-service">';
+			echo '<h2 style="font-weight: bold;">Servizio extra ' . ( $key + 1 ) . '</h2>';
+			echo '<p>Nome: <input type="text" name="_extra_name[]" value="' . $value['name'] . '" /></p>';
+			echo '<p>Descrizione: <input type="text" name="_extra_description[]" value="' . $value['description'] . '" /></p>';
+			echo '<p>Prezzo: <input type="number" name="_extra_price[]" value="' . $value['price'] . '" /></p>';
+			echo '<button class="quoma-extra-service-delete" type="button">Cancella il servizio extra' . ( $key + 1 ) . '</button></div>';
+		}
+	}
+
+	// Chiusura del div '.quoma-container-extra-service'
+	echo '</div>';
 }
 
 
@@ -274,16 +271,8 @@ add_action( 'wp_enqueue_scripts', 'quoma_enqueue_script_front_service' );
  * Codice JavaScript per i servizi lato back end.
  */
 function quoma_enqueue_script_back_service() {
-//	var_dump( get_current_screen()->id );
 	if ( get_current_screen()->id === 'service' ) {
 		wp_enqueue_script( 'back-service.js', plugins_url( '../js/back-service.js', __FILE__ ), array( 'jquery' ), false, true );
-//		wp_localize_script( 'back-service.js', 'service', array(
-//				'ajax_url'        => admin_url( 'admin-ajax.php' ),
-//				'nonce'           => wp_create_nonce( 'ajax-nonce' ),
-//				'service_id'      => get_the_ID(),
-//				'miei_preventivi' => get_permalink( get_page_by_path( 'miei-preventivi' ) ),
-//			)
-//		);
 	}
 }
 
