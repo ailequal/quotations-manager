@@ -8,6 +8,7 @@
  * @since Quotations Manager 0.0.1
  */
 
+
 get_header();
 ?>
 
@@ -28,7 +29,7 @@ get_header();
 			if ( current_user_can( 'subscriber' ) ) {
 				echo '<div id="quoma-request-quotation"><hr><a href="#">Richiedi un preventivo</a><hr></div>';
 			} else {
-				echo '<hr><a href="' . wp_login_url() . '">Effetua il login per richiedere un preventivo</a><hr>';
+				echo '<hr><a href="' . wp_login_url( $_SERVER['REQUEST_URI'] ) . '">Effetua il login per richiedere un preventivo</a><hr>';
 			}
 
 			// Durante il loop stampiamo i servizi extra di ogni servizio

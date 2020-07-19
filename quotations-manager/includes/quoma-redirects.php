@@ -41,7 +41,9 @@ function quoma_login_redirect( $url, $request, $user ) {
 		if ( $user->has_cap( 'administrator' ) ) {
 			$url = admin_url();
 		} else if ( $user->has_cap( 'subscriber' ) ) {
-			$url = get_permalink( get_page_by_path( 'miei-preventivi' ) );
+			if ( strpos( $url, '/servizio/' ) === false ) {
+				$url = get_permalink( get_page_by_path( 'miei-preventivi' ) );
+			}
 		} else {
 			$url = home_url();
 		}
