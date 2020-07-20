@@ -70,7 +70,7 @@ function quoma_create_quotation() {
 	wp_mail( $admin_email, $subject, $message );
 
 	// Risposta della API
-	wp_redirect( get_permalink( get_page_by_path( 'miei-preventivi' ) ) );
+	wp_redirect( get_permalink( $quotation_id ) );
 	wp_die();
 }
 

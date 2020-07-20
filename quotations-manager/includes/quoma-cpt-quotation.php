@@ -36,12 +36,13 @@ function quoma_create_post_type_quotations() {
 	);
 	$args   = array(
 		'labels'               => $labels,
-		'public'               => false,
-		'publicly_queryable'   => false,
+		'public'               => true,
+		'publicly_queryable'   => true,
 		'show_ui'              => true,
 		'show_in_menu'         => true,
 		'show_in_rest'         => true,
-		'query_var'            => false,
+		'query_var'            => true,
+		'exclude_from_search'  => true,
 		'capability_type'      => 'post',
 		'has_archive'          => false,
 		'hierarchical'         => true,
@@ -100,18 +101,36 @@ function quoma_meta_box_quotation_content( $quotation ) {
 
 
 /**
- * Template personalizzato per la pagina 'miei-preventivi'
+ * Template personalizzato per un singolo preventivo.
  *
  * @param object $template Il modello che viene caricato di default.
  *
  * @return string Il modello da caricare personalizzato per la visualizzazione della pagina richiesta.
  */
 function quoma_template_quotation( $template ) {
-	if ( is_page( 'miei-preventivi' ) ) {
+	if ( get_post_type() == 'quotation' ) {
 		return plugin_dir_path( __FILE__ ) . 'quotation.php';
 	}
 
 	return $template;
 }
 
-add_filter( 'page_template', 'quoma_template_quotation' );
+add_filter( 'single_template', 'quoma_template_quotation' );
+
+
+/**
+ * Template personalizzato per la pagina 'miei-preventivi'
+ *
+ * @param object $template Il modello che viene caricato di default.
+ *
+ * @return string Il modello da caricare personalizzato per la visualizzazione della pagina richiesta.
+ */
+function quoma_template_quotations( $template ) {
+	if ( is_page( 'miei-preventivi' ) ) {
+		return plugin_dir_path( __FILE__ ) . 'quotations.php';
+	}
+
+	return $template;
+}
+
+add_filter( 'page_template', 'quoma_template_quotations' );

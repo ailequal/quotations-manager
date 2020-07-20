@@ -1,6 +1,6 @@
 <?php
 /**
- * Il template custom per 'miei-preventivi'
+ * Il template custom per un singolo preventivo
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
  *
@@ -17,53 +17,37 @@ get_header();
 	<?php
 	// Controllo se l'utente e' loggato come 'subscriber'
 	if ( current_user_can( 'subscriber' ) ) {
-		$user      = wp_get_current_user();
-		$user_id   = esc_html( $user->ID );
-		$user_name = esc_html( $user->user_login );
+		$user             = wp_get_current_user();
+		$user_name        = esc_html( $user->user_login );
+		$quotation_author = get_the_author_meta( 'display_name', $post->post_author );
+		// Controllo che l'utente loggato corrisponda all'autore del preventivo
+		if ( $quotation_author === $user_name ) {
+			// Recupero dati del preventivo
+			$quoma_quotation_service_id      = get_post_meta( get_the_ID(), '_service_id', true );
+			$quoma_quotation_service_name    = get_the_title( esc_attr( $quoma_quotation_service_id ) );
+			$quoma_quotation_price_list      = get_post_meta( $quoma_quotation_service_id, '_price_list', true );
+			$quoma_quotation_price_total     = get_post_meta( get_the_ID(), '_price_total', true );
+			$quoma_quotation_extras_selected = get_post_meta( get_the_ID(), '_extras_selected', true );
 
-		// Visualizzare tutti i suoi preventivi
-		echo '<div style="text-align: center">';
-		echo '<h1>I miei preventivi</h1>';
-		echo '<h5>Lista di tutti i preventivi richiesti da <span style="color:red;">' . $user_name . '</span>.</h5>';
-
-		// Inizio custom loop
-		$args  = array(
-			'author'    => $user_id,
-			'post_type' => 'quotation',
-			'order'     => 'DESC',
-		);
-		$query = new WP_Query( $args );
-		if ( $query->have_posts() ) {
-			while ( $query->have_posts() ) {
-				$query->the_post();
-				$service_id         = get_post_meta( get_the_ID(), '_service_id', true );
-				$service_name       = get_post( $service_id )->post_title;
-				$service_price_list = get_post_meta( $service_id, '_price_list', true );
-				$extras_selected    = get_post_meta( get_the_ID(), '_extras_selected', true );
-				$price_total        = get_post_meta( get_the_ID(), '_price_total', true );
-				the_title( '<h3 style="color:blue;">', '</h3>' );
-				echo '<h4>Servizio selezionato: <span style="color:red;">' . $service_name . '</span>.</h4>';
-				echo '<h5>Prezzo base di <span style="color:red;">' . $service_price_list . ' Euro</span>.</h5>';
-				if ( ! empty( $extras_selected ) ) {
-					echo '<h4>Servizi extra selezionati: </h4>';
-					foreach ( $extras_selected as $key => $extra ) {
-						echo '<h6>' . $extra['name'] . '</h6>';
-						echo '<p>' . $extra['description'] . ' Prezzo: ';
-						echo '<span style="color:red;">' . $extra['price'] . ' Euro</span></p>';
-					}
-				} else {
-					echo '<h4>Nessun servizio extra selezionato.</h4>';
+			// Visualizzare il suo preventivo
+			echo '<div style="text-align: center">';
+			the_title( '<h1>', '</h1>' );
+			echo '<h2>Tipologia di servizio:</h2>';
+			echo '<h3>' . $quoma_quotation_service_name . '</h3>';
+			echo '<h2>Servizi extra selezionati:</h2>';
+			if ( ! empty( $quoma_quotation_extras_selected ) ) {
+				foreach ( $quoma_quotation_extras_selected as $key => $extra ) {
+					echo '<h3>' . $extra['name'] . ' (' . $extra['price'] . ' Euro)</h3>';
 				}
-				echo '<h3>Prezzo totale del preventivo: <span style="color:red;">' . $price_total . ' Euro</span>.</h3><hr>';
-				wp_reset_postdata();
+			} else {
+				echo '<h3>Nessun servizio extra selezionato</h3>';
 			}
-		} else {
-			echo '<h6>Non hai ancora richiesto nessun preventivo.</h6>';
+			echo '<h2>Prezzo totale: ' . $quoma_quotation_price_total . ' Euro</h2>';
+			echo '</div>';
 		}
-		echo '</div>';
 	} else {
 		// Non visualizzare niente
-		echo '<h2>Tu non dovresti essere qui.</h2>';
+		echo '<h2 style="text-align: center;">Tu non dovresti essere qui.</h2>';
 	}
 	?>
 

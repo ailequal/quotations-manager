@@ -42,6 +42,7 @@ function quoma_create_post_type_services() {
 		'show_in_menu'         => true,
 		'show_in_rest'         => true,
 		'query_var'            => true,
+		'exclude_from_search'  => false,
 		'rewrite'              => array( 'slug' => 'servizio' ),
 		'capability_type'      => 'post',
 		'has_archive'          => false,
@@ -249,7 +250,7 @@ add_filter( 'single_template', 'quoma_template_service' );
 
 
 /**
- * Codice JavaScript per i servizi lato front end (codice obsoleto).
+ * Codice JavaScript per i servizi lato front end.
  */
 function quoma_enqueue_script_front_service() {
 	if ( is_singular( 'service' ) ) {
