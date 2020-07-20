@@ -1,11 +1,11 @@
 <?php
 /**
- * Gestione redirect
+ * Gestione redirect.
  */
 
 
 /**
- * Controllo accesso "miei-preventivi", accessibile solo per utenti "subscriber" loggati
+ * Controllo accesso "miei-preventivi", accessibile solo per utenti "subscriber" loggati.
  */
 function quoma_custom_redirect_miei_preventivi() {
 	if ( is_page( 'miei-preventivi' ) ) {

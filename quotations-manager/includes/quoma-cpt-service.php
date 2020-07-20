@@ -249,18 +249,11 @@ add_filter( 'single_template', 'quoma_template_service' );
 
 
 /**
- * Codice JavaScript per i servizi lato front end.
+ * Codice JavaScript per i servizi lato front end (codice obsoleto).
  */
 function quoma_enqueue_script_front_service() {
 	if ( is_singular( 'service' ) ) {
 		wp_enqueue_script( 'front-service.js', plugins_url( '../js/front-service.js', __FILE__ ), array( 'jquery' ), false, true );
-		wp_localize_script( 'front-service.js', 'service', array(
-				'ajax_url'        => admin_url( 'admin-ajax.php' ),
-				'nonce'           => wp_create_nonce( 'ajax-nonce' ),
-				'service_id'      => get_the_ID(),
-				'miei_preventivi' => get_permalink( get_page_by_path( 'miei-preventivi' ) ),
-			)
-		);
 	}
 }
 

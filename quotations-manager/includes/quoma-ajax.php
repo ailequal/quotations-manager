@@ -1,28 +1,41 @@
 <?php
-/*
- * AJAX API
-*/
+/**
+ * AJAX API.
+ */
 
-// API quoma_create_quotation
-add_action( 'wp_ajax_quoma_create_quotation', 'quoma_create_quotation' );
+
+/**
+ * API quoma_create_quotation
+ */
 function quoma_create_quotation() {
 	// Controllo nonce
-	if ( ! empty( $_POST['nonce'] ) && ! wp_verify_nonce( $_POST['nonce'], 'ajax-nonce' ) ) {
+	if ( ! empty( $_POST['quoma_service_nonce'] ) && ! wp_verify_nonce( $_POST['quoma_service_nonce'], 'quoma_service_form_save' ) ) {
 		die ( 'Bloccata richiesta dall\'esterno!!' );
 	}
 
 	// Recupero dati e controllo
 	if ( ! empty( $_POST['service_id'] ) || ! empty ( $_POST['extras_selected'] ) ) {
 		$service_id      = $_POST['service_id'];
-		$extras_selected = json_decode( stripslashes( $_POST['extras_selected'] ), true );
+		$extras_selected = $_POST['extras_selected'];
 	} else {
 		die( 'Dati non trasmessi correttamente.' );
 	}
 	$user_id     = get_current_user_ID();
 	$price_total = get_post_meta( $service_id, '_price_list', true );
+	$extras_list = get_post_meta( $service_id, '_extras_list', true );
+
+	// Recupero informazioni relative ai servizi extra selezionati
+	$extras_final = array();
+	foreach ( $extras_list as $alpha => $extra ) {
+		foreach ( $extras_selected as $beta => $slug ) {
+			if ( $slug === $extra['slug'] ) {
+				$extras_final[] = $extra;
+			}
+		}
+	}
 
 	// Calcolo del prezzo totale del preventivo
-	foreach ( $extras_selected as $key => $extra ) {
+	foreach ( $extras_final as $key => $extra ) {
 		$price_total += $extra['price'];
 	}
 
@@ -37,7 +50,7 @@ function quoma_create_quotation() {
 			'_user_id'         => $user_id,
 			'_service_id'      => $service_id,
 			'_price_total'     => $price_total,
-			'_extras_selected' => $extras_selected,
+			'_extras_selected' => $extras_final,
 		),
 	);
 	$quotation_id = wp_insert_post( $quotation );
@@ -57,7 +70,8 @@ function quoma_create_quotation() {
 	wp_mail( $admin_email, $subject, $message );
 
 	// Risposta della API
-	$response = json_encode( 'Preventivo creato correttamente.' );
-	echo $response;
+	wp_redirect( get_permalink( get_page_by_path( 'miei-preventivi' ) ) );
 	wp_die();
 }
+
+add_action( 'wp_ajax_quoma_create_quotation', 'quoma_create_quotation' );

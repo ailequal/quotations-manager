@@ -15,6 +15,7 @@ get_header();
 <main id="site-content" role="main">
 
 	<?php
+	echo '<form method="post" action="' . admin_url( 'admin-ajax.php' ) . '">';
 	// Inizio loop
 	if ( have_posts() ) {
 		while ( have_posts() ) {
@@ -39,21 +40,24 @@ get_header();
 			foreach ( $extras_list as $key => $extra ) {
 				if ( ! empty( $extra['name'] ) ) {
 					echo '<div class="quoma-extra">';
-					echo '<input class="' . $extra['slug'] . '" type="checkbox" name="' . $extra['slug'] . '" value="' . $extra['slug'] . '">';
-					echo '<label style="font-size:22px; font-weight:bold;" for="' . $extra['slug'] . '">' . $extra['name'] . '</label><br>';
+					echo '<input class="' . $extra['slug'] . '" type="checkbox" name="extras_selected[]" value="' . $extra['slug'] . '">';
+					echo '<label style="font-size:22px; font-weight:bold;" for="extras_selected[]">' . $extra['name'] . '</label><br>';
 					echo '<div><p>' . $extra['description'] . '</p><br>';
 					echo 'Prezzo servizio extra: <span style="color:red;">' . $extra['price'] . '</span></div>';
 					echo '</div><hr>';
 				}
 			}
-			echo '<a id="quoma-create-quotation" href="#">Invia preventivo</a>';
+			echo '<input type="hidden" name="action" value="quoma_create_quotation"/>';
+			echo '<input type="hidden" name="service_id" value="' . get_the_ID() . '"/>';
+			wp_nonce_field( 'quoma_service_form_save', 'quoma_service_nonce' );
+			echo '<input type="submit" name="submit" value="Invia preventivo">';
 			echo '</div>';
 		}
 	}
-	echo '</div>';
+	echo '</div></form>';
 	?>
 
-</main><!-- #site-content -->
+</main>
 
 <?php get_template_part( 'template-parts/footer-menus-widgets' ); ?>
 
