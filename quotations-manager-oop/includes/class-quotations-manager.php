@@ -168,6 +168,9 @@ class Quotations_Manager {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_notices', $plugin_admin, 'quoma_admin_notices' );
+		$this->loader->add_action( 'init', $plugin_admin, 'quoma_create_servizi' );
+		$this->loader->add_action( 'init', $plugin_admin, 'quoma_create_miei_preventivi' );
+		$this->loader->add_action( 'init', $plugin_admin, 'quoma_create_accesso_negato' );
 
 		$plugin_admin_settings = new Quotations_Manager_Admin_Settings( $this->get_quotations_manager(), $this->get_version() );
 
