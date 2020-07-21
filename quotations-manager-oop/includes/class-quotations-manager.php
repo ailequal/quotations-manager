@@ -78,6 +78,7 @@ class Quotations_Manager {
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
+		$this->define_redirects_hooks();
 
 	}
 
@@ -126,6 +127,11 @@ class Quotations_Manager {
 		 * La classe che gestisce tutte le opzioni area admin.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-quotations-manager-admin-settings.php';
+
+		/**
+		 * La classe che gestisce tutti i redirect.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-quotations-manager-redirects.php';
 
 		$this->loader = new Quotations_Manager_Loader();
 
@@ -183,6 +189,23 @@ class Quotations_Manager {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+
+	}
+
+	/**
+	 * Registra tutti gli hook riguardanti la gestione dei redirects.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 */
+	private function define_redirects_hooks() {
+
+		$plugin_redirects = new Quotations_Manager_Redirects( $this->get_quotations_manager(), $this->get_version() );
+
+		$this->loader->add_action( 'template_redirect', $plugin_redirects, 'quoma_custom_redirect_miei_preventivi' );
+		$this->loader->add_filter( 'login_redirect', $plugin_redirects, 'quoma_login_redirect', 10, 3 );
+		$this->loader->add_action( 'wp_logout', $plugin_redirects, 'quoma_logout_redirect' );
+		$this->loader->add_action( 'admin_init', $plugin_redirects, 'quoma_subscriber_redirect' );
 
 	}
 
