@@ -122,6 +122,11 @@ class Quotations_Manager {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-quotations-manager-public.php';
 
+		/**
+		 * La classe che gestisce tutte le opzioni area admin.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-quotations-manager-admin-settings.php';
+
 		$this->loader = new Quotations_Manager_Loader();
 
 	}
@@ -157,6 +162,11 @@ class Quotations_Manager {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_notices', $plugin_admin, 'quoma_admin_notices' );
+
+		$plugin_admin_settings = new Quotations_Manager_Admin_Settings( $this->get_quotations_manager(), $this->get_version() );
+
+		$this->loader->add_action( 'admin_menu', $plugin_admin_settings, 'quoma_main_menu' );
+		$this->loader->add_action( 'admin_init', $plugin_admin_settings, 'quoma_register_settings' );
 
 	}
 
