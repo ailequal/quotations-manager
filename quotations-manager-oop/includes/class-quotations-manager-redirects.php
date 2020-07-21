@@ -84,7 +84,7 @@ class Quotations_Manager_Redirects {
 	 *
 	 * @return bool|false|string|void|WP_Error URL per il redirect finale.
 	 */
-	function quoma_login_redirect( $url, $request, $user ) {
+	public function quoma_login_redirect( $url, $request, $user ) {
 		if ( $user && is_object( $user ) && is_a( $user, 'WP_User' ) ) {
 			if ( $user->has_cap( 'administrator' ) ) {
 				$url = admin_url();
@@ -103,7 +103,7 @@ class Quotations_Manager_Redirects {
 	/**
 	 * Gestione del redirect quando si esegue il logout
 	 */
-	function quoma_logout_redirect() {
+	public function quoma_logout_redirect() {
 		wp_redirect( home_url() );
 		exit();
 	}
@@ -111,7 +111,7 @@ class Quotations_Manager_Redirects {
 	/**
 	 * Gestione del redirect quando "subscriber" prova ad accedere a "/wp-admin"
 	 */
-	function quoma_subscriber_redirect() {
+	public function quoma_subscriber_redirect() {
 		if ( is_user_logged_in() ) {
 			$user = wp_get_current_user();
 			if ( $user->has_cap( 'subscriber' ) ) {

@@ -133,6 +133,11 @@ class Quotations_Manager {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-quotations-manager-redirects.php';
 
+		/**
+		 * La classe che gestisce il CPT "service".
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-quotations-manager-admin-service.php';
+
 		$this->loader = new Quotations_Manager_Loader();
 
 	}
@@ -176,6 +181,14 @@ class Quotations_Manager {
 
 		$this->loader->add_action( 'admin_menu', $plugin_admin_settings, 'quoma_main_menu' );
 		$this->loader->add_action( 'admin_init', $plugin_admin_settings, 'quoma_register_settings' );
+
+		$plugin_admin_service = new Quotations_Manager_Admin_Service( $this->get_quotations_manager(), $this->get_version() );
+
+		$this->loader->add_action( 'init', $plugin_admin_service, 'quoma_create_post_type_services' );
+		$this->loader->add_action( 'init', $plugin_admin_service, 'quoma_create_services_taxonomies' );
+		$this->loader->add_action( 'save_post_service', $plugin_admin_service, 'quoma_meta_box_service_save' );
+		$this->loader->add_filter( 'single_template', $plugin_admin_service, 'quoma_template_service' );
+		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin_service, 'enqueue_scripts' );
 
 	}
 
