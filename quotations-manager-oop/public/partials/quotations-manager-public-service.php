@@ -55,7 +55,7 @@ get_header();
 					</div>
 					<hr>
 				<?php endif ?>
-			<?php endforeach; ?>
+			<?php endforeach ?>
 
 			<input type="hidden" name="action" value="quoma_create_quotation"/>
 			<input type="hidden" name="service_id" value="<?php echo get_the_ID() ?>"/>
