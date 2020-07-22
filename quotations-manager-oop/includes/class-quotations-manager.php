@@ -134,9 +134,29 @@ class Quotations_Manager {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-quotations-manager-redirects.php';
 
 		/**
-		 * La classe che gestisce il CPT "service".
+		 * La classe che gestisce il CPT "service" lato admin.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-quotations-manager-admin-service.php';
+
+		/**
+		 * La classe che gestisce il CPT "service" lato public.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-quotations-manager-public-service.php';
+
+		/**
+		 * La classe che gestisce il CPT "quotation" lato admin.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-quotations-manager-admin-quotation.php';
+
+		/**
+		 * La classe che gestisce il CPT "quotation" lato public.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-quotations-manager-public-quotation.php';
+
+		/**
+		 * La classe che gestisce le AJAX API.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-quotations-manager-admin-ajax.php';
 
 		$this->loader = new Quotations_Manager_Loader();
 
@@ -187,8 +207,15 @@ class Quotations_Manager {
 		$this->loader->add_action( 'init', $plugin_admin_service, 'quoma_create_post_type_services' );
 		$this->loader->add_action( 'init', $plugin_admin_service, 'quoma_create_services_taxonomies' );
 		$this->loader->add_action( 'save_post_service', $plugin_admin_service, 'quoma_meta_box_service_save' );
-		$this->loader->add_filter( 'single_template', $plugin_admin_service, 'quoma_template_service' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin_service, 'enqueue_scripts' );
+
+		$plugin_admin_quotation = new Quotations_Manager_Admin_Quotation( $this->get_quotations_manager(), $this->get_version() );
+
+		$this->loader->add_action( 'init', $plugin_admin_quotation, 'quoma_create_post_type_quotations' );
+
+		$plugin_admin_ajax = new Quotations_Manager_Admin_Ajax( $this->get_quotations_manager(), $this->get_version() );
+
+		$this->loader->add_action( 'wp_ajax_quoma_create_quotation', $plugin_admin_ajax, 'quoma_create_quotation' );
 
 	}
 
@@ -205,6 +232,16 @@ class Quotations_Manager {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+
+		$plugin_public_service = new Quotations_Manager_Public_Service( $this->get_quotations_manager(), $this->get_version() );
+
+		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public_service, 'enqueue_scripts' );
+		$this->loader->add_filter( 'single_template', $plugin_public_service, 'quoma_template_service' );
+
+		$plugin_public_quotation = new Quotations_Manager_Public_Quotation( $this->get_quotations_manager(), $this->get_version() );
+
+		$this->loader->add_filter( 'single_template', $plugin_public_quotation, 'quoma_template_quotation' );
+		$this->loader->add_filter( 'page_template', $plugin_public_quotation, 'quoma_template_quotations' );
 
 	}
 

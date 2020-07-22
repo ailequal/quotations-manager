@@ -1,7 +1,7 @@
 <?php
 
 /**
- * La classe che gestisce il CPT "service".
+ * La classe che gestisce il CPT "service" lato admin.
  *
  * @link       http://example.com
  * @since      1.0.0
@@ -11,7 +11,7 @@
  */
 
 /**
- * La classe che gestisce il CPT "service".
+ * La classe che gestisce il CPT "service" lato admin.
  *
  * Definisce il nome del plugin, la versione e tutte le funzioni necessarie.
  *
@@ -296,25 +296,6 @@ class Quotations_Manager_Admin_Service {
 			}
 			update_post_meta( $service_id, '_extras_list', $extras_list );
 		}
-	}
-
-	/**
-	 * Template personalizzato per un singolo servizio.
-	 *
-	 * @param object $template Il modello che viene caricato di default.
-	 *
-	 * @return string Il modello da caricare personalizzato per la visualizzazione della pagina richiesta.
-	 */
-	public
-	function quoma_template_service(
-		$template
-	) {
-		if ( get_post_type() == 'service' ) {
-			return plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/quotations-manager-admin-service.php';
-
-		}
-
-		return $template;
 	}
 
 }

@@ -20,7 +20,7 @@ get_header();
 
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
 <main id="site-content" role="main">
-	<form action="post" action="<?php admin_url( 'admin-ajax.php' ) ?>" style="text-align: center;">
+	<form method="post" action="<?php echo admin_url( 'admin-ajax.php' ) ?>" style="text-align: center;">
 
 		<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 			<h1><?php echo get_the_title() ?></h1>
