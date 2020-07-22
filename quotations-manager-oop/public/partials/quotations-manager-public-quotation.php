@@ -28,7 +28,7 @@ get_header();
 			<div style="text-align: center">
 				<h1><?php echo get_the_title() ?></h1>
 				<h2>Tipologia di servizio:</h2>
-				<h3><?php echo $quoma_quotation_service_name ?></h3>
+				<h3><?php echo $quoma_quotation_service_name ?> (<?php echo $quoma_quotation_price_list ?> Euro)</h3>
 				<h2>Servizi extra selezionati:</h2>
 				<?php if ( ! empty( $quoma_quotation_extras_selected ) ) : ?>
 					<?php foreach ( $quoma_quotation_extras_selected as $key => $extra ) : ?>

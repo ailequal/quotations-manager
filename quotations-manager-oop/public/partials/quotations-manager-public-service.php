@@ -37,7 +37,7 @@ get_header();
 			</div>
 		<?php else : ?>
 			<hr>
-			<a href="<?php wp_login_url( $_SERVER['REQUEST_URI'] ) ?>">Effetua il login per richiedere un preventivo</a>
+			<a href="<?php echo wp_login_url( $_SERVER['REQUEST_URI'] ) ?>">Effetua il login per richiedere un preventivo</a>
 			<hr>
 		<?php endif ?>
 
