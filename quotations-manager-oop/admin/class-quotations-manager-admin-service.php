@@ -219,14 +219,14 @@ class Quotations_Manager_Admin_Service {
 		// Creazione dei post meta necessari
 		add_post_meta( $service->ID, '_name', '', true );
 		add_post_meta( $service->ID, '_description', '', true );
-		add_post_meta( $service->ID, '_days_for_delivery', '', true );
+		add_post_meta( $service->ID, '_option_value', '', true );
 		add_post_meta( $service->ID, '_price_list', '', true );
 		add_post_meta( $service->ID, '_extras_list', '', true );
 
 		// Salvataggio valore post meta nella rispettiva variabile
 		$quoma_service_name              = get_post_meta( $service->ID, '_name', true );
 		$quoma_service_description       = get_post_meta( $service->ID, '_description', true );
-		$quoma_service_days_for_delivery = get_post_meta( $service->ID, '_days_for_delivery', true );
+		$quoma_service_option_value = get_post_meta( $service->ID, '_option_value', true );
 		$quoma_service_price_list        = get_post_meta( $service->ID, '_price_list', true );
 		$quoma_service_extras_list       = get_post_meta( $service->ID, '_extras_list', true );
 
@@ -235,7 +235,7 @@ class Quotations_Manager_Admin_Service {
 		echo '<h2 style="font-weight: bold;">Informazioni basilari</h2>';
 		echo '<p>Nome: <input type="text" name="_name" value="' . esc_attr( $quoma_service_name ) . '" /></p>';
 		echo '<p>Descrizione: <input type="text" name="_description" value="' . esc_attr( $quoma_service_description ) . '" /></p>';
-		echo '<p>' . get_option( 'quoma_options' )['option_label'] . ': <input type="text" name="_days_for_delivery" value="' . esc_attr( $quoma_service_days_for_delivery ) . '" /></p>';
+		echo '<p>' . get_option( 'quoma_options' )['option_label'] . ': <input type="text" name="_option_value" value="' . esc_attr( $quoma_service_option_value ) . '" /></p>';
 		echo '<p>Prezzo di partenza: <input type="number" name="_price_list" value="' . esc_attr( $quoma_service_price_list ) . '" /></p>';
 		echo '<hr>';
 
@@ -270,7 +270,7 @@ class Quotations_Manager_Admin_Service {
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
 		}
-		if ( empty( $_POST['_name'] ) || empty( $_POST['_description'] ) || empty( $_POST['_days_for_delivery'] ) || empty( $_POST['_price_list'] ) ) {
+		if ( empty( $_POST['_name'] ) || empty( $_POST['_description'] ) || empty( $_POST['_option_value'] ) || empty( $_POST['_price_list'] ) ) {
 			return;
 		}
 		wp_verify_nonce( plugin_basename( __FILE__ ), 'quoma_meta_box_service_nonce' );
@@ -278,7 +278,7 @@ class Quotations_Manager_Admin_Service {
 		// Salvataggio informazioni basilari
 		update_post_meta( $service_id, '_name', sanitize_text_field( $_POST['_name'] ) );
 		update_post_meta( $service_id, '_description', sanitize_text_field( $_POST['_description'] ) );
-		update_post_meta( $service_id, '_days_for_delivery', sanitize_text_field( $_POST['_days_for_delivery'] ) );
+		update_post_meta( $service_id, '_option_value', sanitize_text_field( $_POST['_option_value'] ) );
 		update_post_meta( $service_id, '_price_list', sanitize_text_field( $_POST['_price_list'] ) );
 
 		// Controlli per il salvataggio dei servizi extra
